@@ -21,10 +21,12 @@
   header p { margin: 0; color: var(--muted); max-width: 70ch; }
   .wrap { padding: 0 24px 32px; }
   .toolbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 12px 0; }
-  .toolbar button, .toolbar select {
+  .toolbar button, .toolbar select, .toolbar a.btn {
     font: inherit; font-size: 14px; padding: 6px 12px; border: 1px solid var(--line);
     background: var(--panel); color: var(--ink); border-radius: 6px; cursor: pointer; }
-  .toolbar button:hover, .toolbar select:hover { border-color: #b9b5ab; }
+  .toolbar button:hover, .toolbar select:hover, .toolbar a.btn:hover { border-color: #b9b5ab; }
+  .toolbar a.btn { text-decoration: none; display: inline-block; }
+  .toolbar .dl { font-weight: 600; }
   .toolbar label { font-size: 14px; color: var(--muted); display: inline-flex; gap: 6px; align-items: center; }
   .toolbar .zoomval { min-width: 4ch; text-align: right; font-variant-numeric: tabular-nums; color: var(--muted); font-size: 14px; }
   .spacer { flex: 1; }
@@ -70,6 +72,8 @@
     <span class="zoomval" id="zval">100%</span>
     <button id="fit" title="Fit diagram to window">Fit</button>
     <button id="actual" title="Show at 100%">100%</button>
+    <button id="dlsvg" class="dl" title="Save the diagram as shown (current section and layout) as an SVG image">⬇ Download diagram (SVG)</button>
+    <a class="btn dl" href="hangool-erd.html" download="hangool-erd.html" title="Save this whole page to open offline-ready in any browser">⬇ Download page (HTML)</a>
     <span class="spacer"></span>
     <label>Section
       <select id="focus"><option value="">All sections</option></select>
@@ -563,6 +567,25 @@
   document.getElementById("zout").onclick = function () { var c = center(); zoomAt(0.8, c.x, c.y); };
   document.getElementById("fit").onclick = fit;
   document.getElementById("actual").onclick = actual;
+  document.getElementById("dlsvg").onclick = function () {
+    var svg = stage.querySelector("svg");
+    if (!svg) return;
+    var clone = svg.cloneNode(true);
+    var vb = svg.viewBox.baseVal;
+    clone.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+    clone.setAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
+    clone.setAttribute("width", Math.ceil(vb.width));
+    clone.setAttribute("height", Math.ceil(vb.height));
+    clone.style.maxWidth = "";
+    clone.style.background = "#ffffff";
+    var xml = '<?xml version="1.0" encoding="UTF-8"?>\n' + new XMLSerializer().serializeToString(clone);
+    var url = URL.createObjectURL(new Blob([xml], { type: "image/svg+xml" }));
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = "hangool-erd" + (focusSel.value ? "-" + focusSel.value : "") + ".svg";
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function () { URL.revokeObjectURL(url); }, 2000);
+  };
 
   // ---- Render ---------------------------------------------------------------
   if (!window.mermaid) {

@@ -10,6 +10,12 @@ Planning files for the Hangool Construction ERP.
 
 Live page: https://mo-hakiim.github.io/erp-hangool/
 
+## Download
+
+- **Diagram page (HTML):** [download hangool-erd.html](https://raw.githubusercontent.com/mo-hakiim/erp-hangool/main/hangool-erd.html) (right-click → *Save link as…*), then open it in any web browser.
+- **Diagram image (SVG):** open the live page and click **Download diagram (SVG)**. It saves the diagram as shown, so pick a section first if you only want part of it.
+- The live page also has a **Download page (HTML)** button.
+
 You can also download `hangool-erd.html` and open it in any web browser. You don't need to install anything, but you do need internet, because the page loads Mermaid from a CDN to draw the diagram.
 
 - Scroll or pinch to zoom, and drag to pan.
