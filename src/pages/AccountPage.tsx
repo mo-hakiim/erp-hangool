@@ -24,7 +24,7 @@ export function AccountPage() {
       <div className="space-y-6">
         <ProfileCard />
         <Card className="p-5 sm:p-6">
-          <h2 className="mb-4 text-base font-semibold text-slate-900">{t.auth.changePasswordTitle}</h2>
+          <h2 className="mb-4 text-base font-semibold text-neutral-900">{t.auth.changePasswordTitle}</h2>
           <div className="max-w-sm"><NewPasswordForm email={auth.profile?.email} /></div>
         </Card>
         <div id="security" className="scroll-mt-20">{auth.isStaff && <MfaCard />}</div>
@@ -55,7 +55,7 @@ function ProfileCard() {
 
   return (
     <Card className="p-5 sm:p-6">
-      <h2 className="mb-4 text-base font-semibold text-slate-900">{t.auth.profile}</h2>
+      <h2 className="mb-4 text-base font-semibold text-neutral-900">{t.auth.profile}</h2>
       <form onSubmit={save} className="grid gap-4 sm:grid-cols-2">
         {msg && <div className="sm:col-span-2"><Alert tone={msg.tone}>{msg.text}</Alert></div>}
         <Field label={t.auth.fullName} htmlFor="full-name">
@@ -68,7 +68,7 @@ function ProfileCard() {
           <Input id="email" value={auth.profile?.email ?? ""} disabled />
         </Field>
         <div className="space-y-1.5">
-          <p className="text-sm font-medium text-slate-700">{t.auth.roles}</p>
+          <p className="text-sm font-medium text-neutral-700">{t.auth.roles}</p>
           <div className="flex flex-wrap gap-1.5 pt-1">
             {auth.roles.map((r) => <Badge key={r} tone="amber">{t.roles[r]}</Badge>)}
           </div>
@@ -100,16 +100,16 @@ function MfaCard() {
 
   return (
     <Card className="p-5 sm:p-6">
-      <h2 className="mb-1 text-base font-semibold text-slate-900">{t.auth.mfaTitle}</h2>
-      <p className="mb-4 text-sm text-slate-600">{t.auth.mfaIntro}</p>
+      <h2 className="mb-1 text-base font-semibold text-neutral-900">{t.auth.mfaTitle}</h2>
+      <p className="mb-4 text-sm text-neutral-600">{t.auth.mfaIntro}</p>
       {error && <div className="mb-4"><Alert tone="error">{error}</Alert></div>}
       {factor ? (
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-3">
             <ShieldCheck className="h-8 w-8 text-emerald-600" />
             <div>
-              <p className="text-sm font-medium text-slate-900">{t.auth.mfaEnabled}</p>
-              <p className="text-xs text-slate-500">{fmt(t.auth.mfaEnabledSince, { date: formatDate(factor.created_at, locale) })}</p>
+              <p className="text-sm font-medium text-neutral-900">{t.auth.mfaEnabled}</p>
+              <p className="text-xs text-neutral-500">{fmt(t.auth.mfaEnabledSince, { date: formatDate(factor.created_at, locale) })}</p>
             </div>
           </div>
           {!auth.requireStaff2fa && (
@@ -124,7 +124,7 @@ function MfaCard() {
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-3">
             <ShieldOff className="h-8 w-8 text-amber-500" />
-            <p className="text-sm font-medium text-slate-900">{t.auth.mfaOff}</p>
+            <p className="text-sm font-medium text-neutral-900">{t.auth.mfaOff}</p>
           </div>
           <Button onClick={() => setEnrolling(true)}>{t.auth.mfaStart}</Button>
         </div>

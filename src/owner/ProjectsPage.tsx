@@ -63,8 +63,8 @@ export function ProjectsPage() {
   const columns: Column<ProjectRow>[] = [
     { key: "name", label: t.projects.name, primary: true, render: (r) => (
       <div className="min-w-0">
-        <p className="font-medium text-slate-900">{r.name}</p>
-        <p className="text-xs text-slate-500">{r.code}{r.location ? ` · ${r.location}` : ""}</p>
+        <p className="font-medium text-neutral-900">{r.name}</p>
+        <p className="text-xs text-neutral-500">{r.code}{r.location ? ` · ${r.location}` : ""}</p>
       </div>
     ), value: (r) => `${r.name} ${r.code} ${r.location ?? ""}` },
     { key: "client_name", label: t.common.client },
@@ -177,8 +177,8 @@ function CreateProjectModal({ open, onClose, onCreated }: { open: boolean; onClo
         <Field label={t.projects.endDate} htmlFor="p-end"><Input id="p-end" type="date" min={form.start_date || undefined} value={form.end_date} onChange={set("end_date")} /></Field>
         <Field label={t.projects.contractValue} htmlFor="p-value"><Input id="p-value" type="number" min="0" step="0.01" inputMode="decimal" value={form.contract_value} onChange={set("contract_value")} /></Field>
         <Field label={t.projects.budget} htmlFor="p-budget"><Input id="p-budget" type="number" min="0" step="0.01" inputMode="decimal" value={form.budget} onChange={set("budget")} /></Field>
-        <label className="flex items-center gap-2 text-sm text-slate-700 sm:col-span-2">
-          <input type="checkbox" className="h-4 w-4 rounded border-slate-300 text-brand-600" checked={defaultStages} onChange={(e) => setDefaultStages(e.target.checked)} />
+        <label className="flex items-center gap-2 text-sm text-neutral-700 sm:col-span-2">
+          <input type="checkbox" className="h-4 w-4 rounded border-neutral-300 text-primary" checked={defaultStages} onChange={(e) => setDefaultStages(e.target.checked)} />
           {fmt(t.projects.defaultStages, { names: settings.stageNames.join(", ") })}
         </label>
       </form>

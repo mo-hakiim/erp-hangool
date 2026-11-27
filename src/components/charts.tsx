@@ -4,12 +4,24 @@ import {
 import { useCompany } from "@/features/settings/CompanySettings";
 
 // One restrained palette for all charts: ink, amber (brand), teal, sky, slate, rose.
-export const chartColors = ["#0f172a", "#f59e0b", "#0d9488", "#0ea5e9", "#94a3b8", "#e11d48", "#8b5cf6"];
+// Brand chart colors, read from the CSS variables in src/index.css (one place to change them).
+export type BrandColor = "primary" | "gold" | "mid" | "muted" | "goldLight" | "danger" | "soft";
+const cssVar: Record<BrandColor, string> = { primary: "--chart-1", gold: "--chart-2", mid: "--chart-3", muted: "--chart-4", goldLight: "--chart-5", danger: "--chart-6", soft: "--chart-soft" };
+export function brandColor(name: BrandColor, alpha = 1) {
+  const raw = typeof document === "undefined" ? "" : getComputedStyle(document.documentElement).getPropertyValue(cssVar[name]).trim();
+  const [r, g, b] = (raw || "23 61 42").split(/\s+/);
+  return alpha === 1 ? `rgb(${r}, ${g}, ${b})` : `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+export const chartColors = new Proxy([] as string[], { get: (_t, p) => {
+  const order: BrandColor[] = ["primary", "gold", "mid", "muted", "goldLight", "danger"];
+  if (p === "length") return order.length;
+  const i = Number(p); return Number.isInteger(i) ? brandColor(order[i % order.length]!) : undefined;
+} });
 
 type Series = { key: string; label: string; color?: string };
 type Row = Record<string, string | number>;
 
-const axis = { stroke: "#94a3b8", fontSize: 12, tickLine: false, axisLine: false } as const;
+const axis = { stroke: "rgb(149, 153, 144)", fontSize: 12, tickLine: false, axisLine: false } as const;
 
 function useTick(money?: boolean) {
   const { money: fmt } = useCompany();
@@ -21,7 +33,7 @@ function MoneyTooltip({ money }: { money?: boolean }) {
   return (
     <Tooltip
       cursor={{ fill: "rgba(148,163,184,0.12)" }}
-      contentStyle={{ borderRadius: 8, border: "1px solid #e2e8f0", fontSize: 12 }}
+      contentStyle={{ borderRadius: 8, border: "1px solid rgb(222, 218, 206)", fontSize: 12 }}
       formatter={(v: number) => (money ? fmt(v) : v.toLocaleString())}
     />
   );
@@ -35,7 +47,7 @@ export function BarChartCard({ data, x, series, money, stacked, height = 260, ho
     <div style={{ height }} className="w-full">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data} layout={horizontal ? "vertical" : "horizontal"} margin={{ top: 8, right: 8, left: horizontal ? 8 : -8, bottom: 0 }}>
-          <CartesianGrid stroke="#f1f5f9" vertical={horizontal} horizontal={!horizontal} />
+          <CartesianGrid stroke="rgb(243, 239, 228)" vertical={horizontal} horizontal={!horizontal} />
           {horizontal ? (
             <>
               <XAxis type="number" {...axis} tickFormatter={tick} />
@@ -65,7 +77,7 @@ export function LineChartCard({ data, x, series, money, height = 260, area }: { 
     <div style={{ height }} className="w-full">
       <ResponsiveContainer width="100%" height="100%">
         <Chart data={data} margin={{ top: 8, right: 8, left: -8, bottom: 0 }}>
-          <CartesianGrid stroke="#f1f5f9" vertical={false} />
+          <CartesianGrid stroke="rgb(243, 239, 228)" vertical={false} />
           <XAxis dataKey={x} {...axis} />
           <YAxis {...axis} tickFormatter={tick} width={56} />
           <MoneyTooltip money={money} />
@@ -86,24 +98,24 @@ export function DonutChartCard({ data, money, height = 220 }: { data: Array<{ na
   const { money: fmt } = useCompany();
   const total = data.reduce((s, d) => s + d.value, 0);
   return (
-    <div className="flex flex-col items-center gap-4 sm:flex-row">
+    <div className="flex min-w-0 flex-col items-center gap-4 sm:flex-row">
       <div style={{ height, width: height }} className="shrink-0">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie data={data} dataKey="value" nameKey="name" innerRadius="62%" outerRadius="95%" paddingAngle={2} stroke="none">
               {data.map((d, i) => <Cell key={d.name} fill={d.color ?? chartColors[i % chartColors.length]} />)}
             </Pie>
-            <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e2e8f0", fontSize: 12 }} formatter={(v: number) => (money ? fmt(v) : v.toLocaleString())} />
+            <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid rgb(222, 218, 206)", fontSize: 12 }} formatter={(v: number) => (money ? fmt(v) : v.toLocaleString())} />
           </PieChart>
         </ResponsiveContainer>
       </div>
-      <ul className="w-full space-y-1.5 text-sm">
+      <ul className="w-full min-w-0 flex-1 space-y-1.5 text-sm">
         {data.map((d, i) => (
-          <li key={d.name} className="flex items-center gap-2">
+          <li key={d.name} className="flex min-w-0 items-center gap-2">
             <span className="h-2.5 w-2.5 shrink-0 rounded-full" style={{ background: d.color ?? chartColors[i % chartColors.length] }} />
-            <span className="flex-1 truncate text-slate-600">{d.name}</span>
-            <span className="font-medium tabular-nums text-slate-900">{money ? fmt(d.value) : d.value.toLocaleString()}</span>
-            <span className="w-10 text-right text-xs tabular-nums text-slate-400">{total ? Math.round((d.value / total) * 100) : 0}%</span>
+            <span className="min-w-0 flex-1 truncate text-neutral-600" title={d.name}>{d.name}</span>
+            <span className="font-medium tabular-nums text-neutral-900">{money ? fmt(d.value) : d.value.toLocaleString()}</span>
+            <span className="w-10 text-right text-xs tabular-nums text-neutral-400">{total ? Math.round((d.value / total) * 100) : 0}%</span>
           </li>
         ))}
       </ul>

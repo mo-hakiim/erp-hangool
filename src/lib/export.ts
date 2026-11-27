@@ -34,10 +34,19 @@ export function exportPdf(title: string, head: string[], rows: string[][], subti
   const table = `<table><thead><tr>${head.map((h) => `<th>${escapeHtml(h)}</th>`).join("")}</tr></thead><tbody>${rows
     .map((r) => `<tr>${r.map((c) => `<td>${escapeHtml(c ?? "")}</td>`).join("")}</tr>`)
     .join("")}</tbody></table>`;
+  // Brand colors come from the theme variables in src/index.css.
+  const css = getComputedStyle(document.documentElement);
+  const c = (name: string, fallback: string) => {
+    const v = css.getPropertyValue(name).trim();
+    return v ? `rgb(${v.split(/\s+/).join(",")})` : fallback;
+  };
+  const ink = c("--n-900", "#222"), muted = c("--n-500", "#5a635d"), line = c("--n-200", "#dedace");
+  const head2 = c("--n-100", "#f3efe4"), green = c("--primary", "#173d2a"), gold = c("--gold", "#d1a62b");
   w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>${escapeHtml(title)}</title>
-<style>body{font-family:system-ui,Segoe UI,sans-serif;margin:24px;color:#0f172a}h1{font-size:18px;margin:0}
-p{color:#64748b;font-size:12px;margin:4px 0 16px}table{border-collapse:collapse;width:100%;font-size:11px}
-th,td{border:1px solid #e2e8f0;padding:5px 7px;text-align:left}th{background:#f1f5f9}</style></head>
+<style>body{font-family:"Nunito Sans",system-ui,Segoe UI,sans-serif;margin:24px;color:${ink}}
+h1{font-family:Montserrat,system-ui,sans-serif;font-size:18px;margin:0;color:${green};border-top:4px solid ${gold};padding-top:10px}
+p{color:${muted};font-size:12px;margin:4px 0 16px}table{border-collapse:collapse;width:100%;font-size:11px}
+th,td{border:1px solid ${line};padding:5px 7px;text-align:left}th{background:${head2};color:${green}}</style></head>
 <body><h1>${escapeHtml(title)}</h1><p>Hangool ERP · ${escapeHtml(subtitle || new Date().toLocaleString())}</p>${table}
 <script>window.onload=function(){window.print()}</script></body></html>`);
   w.document.close();

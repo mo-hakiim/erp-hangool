@@ -87,6 +87,11 @@ Every sample card or page shows a purple **Demo data** badge. All sample values 
 `src/demo/ownerDemo.ts`; to make a screen live, replace its import from that file with a Supabase
 query that returns the same shape (the tables already exist — see `docs/erd.md`).
 
+### Demo staff accounts (@hangooldevelopment.com)
+`node scripts/create-demo-staff.mjs` creates or refreshes 7 confirmed staff accounts (Owner, General
+manager, Site engineer, Quantity surveyor, Architect, Marketing, Finance) without sending any email.
+Their shared password is `DEMO_STAFF_PASSWORD` in `.env.local` (git-ignored, never commit it).
+
 ### Demo logins (seed only)
 All demo users share the test password written at the top of `supabase/seed.sql`.
 Emails are `owner@demo.hangool.test`, `finance@demo.hangool.test`, `client.a@demo.hangool.test`, etc.

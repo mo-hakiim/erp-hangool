@@ -106,7 +106,7 @@ export function DataTable<T>({
         <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
           {searchable && (
             <div className="relative sm:w-72">
-              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" aria-hidden />
+              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400" aria-hidden />
               <Input value={q} onChange={(e) => { setQ(e.target.value); setPage(0); }} placeholder={searchPlaceholder ?? t.common.search} className="pl-9" aria-label={t.common.search} />
             </div>
           )}
@@ -117,7 +117,7 @@ export function DataTable<T>({
             </Select>
           ))}
           {anyFilter && (
-            <button onClick={() => { setQ(""); setActive({}); }} className="text-sm font-medium text-brand-700 hover:underline">{t.common.clearFilters}</button>
+            <button onClick={() => { setQ(""); setActive({}); }} className="text-sm font-medium text-primary hover:underline">{t.common.clearFilters}</button>
           )}
           <div className="flex flex-1 flex-wrap justify-end gap-2">
             {toolbar}
@@ -132,32 +132,32 @@ export function DataTable<T>({
       )}
 
       {filtered.length === 0 ? (
-        <div className="rounded-xl border border-dashed border-slate-200 bg-white">
+        <div className="rounded-2xl border border-dashed border-neutral-300 bg-surface">
           <EmptyState icon={<SearchX className="h-10 w-10" />} title={anyFilter ? t.common.noResults : emptyTitle ?? t.common.noResults} body={anyFilter ? t.common.noResultsBody : emptyBody} />
         </div>
       ) : (
         <>
           {/* table on tablet / desktop */}
-          <div className="hidden overflow-x-auto rounded-xl border border-slate-200 bg-white md:block">
-            <table className="min-w-full divide-y divide-slate-100 text-sm">
-              <thead className="bg-slate-50">
+          <div className="hidden overflow-x-auto rounded-2xl border border-neutral-200/80 bg-surface shadow-card md:block">
+            <table className="min-w-full divide-y divide-neutral-100 text-sm">
+              <thead className="border-b border-neutral-200 bg-neutral-50/80">
                 <tr>
                   {columns.map((c) => (
-                    <th key={c.key} scope="col" className={cn("whitespace-nowrap px-3 py-2.5 text-left text-xs font-semibold uppercase tracking-wide text-slate-500",
+                    <th key={c.key} scope="col" className={cn("whitespace-nowrap px-4 py-3 text-left text-[11px] font-bold uppercase tracking-wider text-neutral-500",
                       (c.align === "right" || c.kind === "money" || c.kind === "number") && "text-right")}>{c.label}</th>
                   ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-neutral-100">
                 {slice.map((row) => {
                   const k = rowKey(row);
                   return (
                     <tr key={k} onClick={onRowClick ? () => onRowClick(row) : undefined}
-                      className={cn(onRowClick && "cursor-pointer hover:bg-slate-50", selectedKey === k && "bg-amber-50")}>
+                      className={cn(onRowClick && "cursor-pointer", "transition-colors hover:bg-primary-soft/30", selectedKey === k && "bg-primary-soft/50")}>
                       {columns.map((c) => (
-                        <td key={c.key} className={cn(compact ? "py-2" : "py-2.5", "px-3 align-middle text-slate-700",
+                        <td key={c.key} className={cn(compact ? "py-2" : "py-3", "px-4 align-middle text-neutral-700",
                           (c.align === "right" || c.kind === "money" || c.kind === "number") && "whitespace-nowrap text-right tabular-nums",
-                          c.primary && "font-medium text-slate-900")}>
+                          c.primary && "font-medium text-neutral-900")}>
                           {display(row, c)}
                         </td>
                       ))}
@@ -176,13 +176,13 @@ export function DataTable<T>({
                   <div role={onRowClick ? "button" : undefined} tabIndex={onRowClick ? 0 : undefined}
                     onClick={onRowClick ? () => onRowClick(row) : undefined}
                     onKeyDown={onRowClick ? (e) => { if (e.key === "Enter") onRowClick(row); } : undefined}
-                    className={cn("rounded-xl border border-slate-200 bg-white p-3", selectedKey === k && "border-brand-300 bg-amber-50")}>
-                    <div className="mb-2 font-medium text-slate-900">{display(row, primary)}</div>
+                    className={cn("rounded-2xl border border-neutral-200/80 bg-surface p-4 shadow-card", selectedKey === k && "border-primary/40 bg-primary-soft/50")}>
+                    <div className="mb-2 font-medium text-neutral-900">{display(row, primary)}</div>
                     <dl className="grid grid-cols-2 gap-x-3 gap-y-1.5 text-sm">
                       {columns.filter((c) => c !== primary && !c.hideOnMobile).map((c) => (
                         <div key={c.key} className="min-w-0">
-                          <dt className="text-[11px] uppercase tracking-wide text-slate-500">{c.label}</dt>
-                          <dd className="truncate text-slate-800">{display(row, c)}</dd>
+                          <dt className="text-[11px] uppercase tracking-wide text-neutral-500">{c.label}</dt>
+                          <dd className="truncate text-neutral-800">{display(row, c)}</dd>
                         </div>
                       ))}
                     </dl>
@@ -192,7 +192,7 @@ export function DataTable<T>({
             })}
           </ul>
           {pages > 1 && (
-            <div className="mt-3 flex items-center justify-between gap-2 text-sm text-slate-600">
+            <div className="mt-3 flex items-center justify-between gap-2 text-sm text-neutral-600">
               <span>{fmt(t.common.rowsShown, { from: current * pageSize + 1, to: Math.min(filtered.length, (current + 1) * pageSize), total: filtered.length })}</span>
               <div className="flex gap-2">
                 <Button size="sm" variant="secondary" disabled={current === 0} onClick={() => setPage(current - 1)}>{t.common.prev}</Button>

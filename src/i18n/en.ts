@@ -78,6 +78,8 @@ export const en = {
     menu: "Menu",
     openMenu: "Open menu",
     closeMenu: "Close menu",
+    collapseMenu: "Collapse menu",
+    expandMenu: "Expand menu",
     notifications: "Notifications",
     noNotifications: "No notifications yet.",
     markAllRead: "Mark all as read",

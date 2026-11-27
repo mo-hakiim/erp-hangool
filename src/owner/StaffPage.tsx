@@ -56,9 +56,9 @@ export function StaffPage() {
   const columns: Column<Person>[] = [
     { key: "full_name", label: t.common.name, primary: true, render: (p) => (
       <div className="min-w-0">
-        <p className="font-medium text-slate-900">{p.full_name}{p.id === auth.session?.user.id && <span className="ml-1 text-xs font-normal text-slate-500">({t.staff.you})</span>}</p>
-        <p className="truncate text-xs text-slate-500">{p.email}</p>
-        {p.client_name && <p className="text-xs text-slate-500">{fmt(t.staff.clientLinked, { name: p.client_name })}</p>}
+        <p className="font-medium text-neutral-900">{p.full_name}{p.id === auth.session?.user.id && <span className="ml-1 text-xs font-normal text-neutral-500">({t.staff.you})</span>}</p>
+        <p className="truncate text-xs text-neutral-500">{p.email}</p>
+        {p.client_name && <p className="text-xs text-neutral-500">{fmt(t.staff.clientLinked, { name: p.client_name })}</p>}
       </div>
     ), value: (p) => `${p.full_name} ${p.email}` },
     { key: "roles", label: t.staff.roles, render: (p) => (
@@ -66,7 +66,7 @@ export function StaffPage() {
     ), value: (p) => p.roles.map((r) => t.roles[r]).join(", ") },
     { key: "status", label: t.common.status, render: (p) => <StatusBadge value={!p.is_active ? "inactive" : !p.last_sign_in_at && p.invited_at ? "invited" : "active"} />,
       value: (p) => (!p.is_active ? "inactive" : "active") },
-    { key: "has_2fa", label: t.staff.twoFa, render: (p) => p.has_2fa ? <ShieldCheck className="h-4 w-4 text-emerald-600" aria-label="2FA on" /> : <ShieldOff className="h-4 w-4 text-slate-300" aria-label="2FA off" />, value: (p) => (p.has_2fa ? "on" : "off") },
+    { key: "has_2fa", label: t.staff.twoFa, render: (p) => p.has_2fa ? <ShieldCheck className="h-4 w-4 text-emerald-600" aria-label="2FA on" /> : <ShieldOff className="h-4 w-4 text-neutral-300" aria-label="2FA off" />, value: (p) => (p.has_2fa ? "on" : "off") },
     { key: "last_sign_in_at", label: t.staff.lastSignIn, render: (p) => (p.last_sign_in_at ? timeAgo(p.last_sign_in_at, t) : t.staff.never), hideOnMobile: true },
     { key: "actions", label: t.common.actions, render: (p) => (
       <div className="flex justify-end gap-1" onClick={(e) => e.stopPropagation()}>
@@ -111,8 +111,8 @@ function RolePicker({ value, onChange }: { value: RoleCode[]; onChange: (v: Role
   return (
     <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
       {ALL_ROLES.map((r) => (
-        <label key={r} className="flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-2 text-sm hover:bg-slate-50">
-          <input type="checkbox" className="h-4 w-4 rounded border-slate-300" checked={value.includes(r)}
+        <label key={r} className="flex items-center gap-2 rounded-lg border border-neutral-200 px-3 py-2 text-sm hover:bg-neutral-50">
+          <input type="checkbox" className="h-4 w-4 rounded border-neutral-300" checked={value.includes(r)}
             onChange={(e) => onChange(e.target.checked ? [...value, r] : value.filter((x) => x !== r))} />
           {t.roles[r]}
         </label>
@@ -179,14 +179,14 @@ function InviteModal({ onClose, onDone, friendly }: { onClose: () => void; onDon
     <Modal open onClose={onClose} title={t.staff.inviteTitle} wide
       footer={<><Button variant="secondary" onClick={onClose}>{t.app.cancel}</Button><Button type="submit" form="invite-form" loading={busy}>{t.staff.sendInvite}</Button></>}>
       <form id="invite-form" onSubmit={submit} className="space-y-4">
-        <p className="text-sm text-slate-600">{t.staff.inviteHint}</p>
+        <p className="text-sm text-neutral-600">{t.staff.inviteHint}</p>
         {error && <Alert tone={error === t.staff.functionMissing ? "warning" : "error"}>{error}</Alert>}
         <div className="grid gap-4 sm:grid-cols-2">
           <Field label={t.staff.fullName} htmlFor="inv-name"><Input id="inv-name" required value={name} onChange={(e) => setName(e.target.value)} /></Field>
           <Field label={t.common.email} htmlFor="inv-email"><Input id="inv-email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} /></Field>
         </div>
         <div>
-          <p className="mb-2 text-sm font-medium text-slate-700">{t.staff.roles}</p>
+          <p className="mb-2 text-sm font-medium text-neutral-700">{t.staff.roles}</p>
           <RolePicker value={roles} onChange={setRoles} />
         </div>
         {roles.includes("client") && (

@@ -30,9 +30,9 @@ export function NoAccess() {
   return (
     <div className="mx-auto flex max-w-md flex-col items-center py-16 text-center">
       <div className="mb-4 rounded-full bg-red-50 p-4 text-red-600"><ShieldOff className="h-8 w-8" aria-hidden /></div>
-      <h1 className="text-xl font-semibold text-slate-900">{t.guard.title}</h1>
-      <p className="mt-2 text-sm text-slate-600">{t.guard.body}</p>
-      <Link to={homePathFor(auth.roles)} className="mt-6 text-sm font-medium text-brand-700 hover:underline">{t.guard.goHome}</Link>
+      <h1 className="text-xl font-semibold text-neutral-900">{t.guard.title}</h1>
+      <p className="mt-2 text-sm text-neutral-600">{t.guard.body}</p>
+      <Link to={homePathFor(auth.roles)} className="mt-6 text-sm font-medium text-primary hover:underline">{t.guard.goHome}</Link>
     </div>
   );
 }
@@ -42,10 +42,10 @@ export function NotFound() {
   const auth = useAuth();
   return (
     <div className="mx-auto max-w-md py-16 text-center">
-      <p className="text-5xl font-semibold text-slate-300">404</p>
-      <h1 className="mt-4 text-xl font-semibold text-slate-900">{t.guard.notFoundTitle}</h1>
-      <p className="mt-2 text-sm text-slate-600">{t.guard.notFoundBody}</p>
-      <Link to={homePathFor(auth.roles)} className="mt-6 inline-block text-sm font-medium text-brand-700 hover:underline">{t.guard.goHome}</Link>
+      <p className="text-5xl font-semibold text-neutral-300">404</p>
+      <h1 className="mt-4 text-xl font-semibold text-neutral-900">{t.guard.notFoundTitle}</h1>
+      <p className="mt-2 text-sm text-neutral-600">{t.guard.notFoundBody}</p>
+      <Link to={homePathFor(auth.roles)} className="mt-6 inline-block text-sm font-medium text-primary hover:underline">{t.guard.goHome}</Link>
     </div>
   );
 }

@@ -6,7 +6,7 @@ import { useCompany } from "@/features/settings/CompanySettings";
 import { Card, PageHeader } from "@/components/ui";
 import { DemoBadge, Section, StatCard, Tabs, statusLabel } from "@/components/blocks";
 import { DataTable } from "@/components/DataTable";
-import { BarChartCard, DonutChartCard, LineChartCard } from "@/components/charts";
+import { BarChartCard, DonutChartCard, LineChartCard, brandColor } from "@/components/charts";
 import { financeDemo as d } from "@/demo/ownerDemo";
 
 type Tab = "income" | "cash" | "ar" | "ap" | "invoices" | "payments" | "receipts" | "pl" | "cashflow";
@@ -42,7 +42,7 @@ export function FinancePage() {
           </div>
           <div className="grid gap-4 lg:grid-cols-5">
             <Section title={t.finance.monthlyTrend} demo className="lg:col-span-3">
-              <BarChartCard money data={d.monthly} x="month" series={[{ key: "income", label: t.finance.income, color: "#0d9488" }, { key: "expenses", label: t.finance.expenses, color: "#e11d48" }]} />
+              <BarChartCard money data={d.monthly} x="month" series={[{ key: "income", label: t.finance.income, color: brandColor("primary") }, { key: "expenses", label: t.finance.expenses, color: brandColor("danger") }]} />
             </Section>
             <Section title={t.finance.byCategory} demo className="lg:col-span-2"><DonutChartCard money data={d.expenseByCategory} /></Section>
           </div>
@@ -67,12 +67,12 @@ export function FinancePage() {
           <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
             {d.accounts.map((a) => (
               <Card key={a.id} className="p-4">
-                <div className="flex items-center gap-2 text-slate-500">
+                <div className="flex items-center gap-2 text-neutral-500">
                   {a.kind === "bank" ? <Landmark className="h-4 w-4" /> : a.kind === "cash" ? <Wallet className="h-4 w-4" /> : <Smartphone className="h-4 w-4" />}
                   <span className="truncate text-xs font-medium uppercase tracking-wide">{a.name}</span>
                 </div>
-                <p className="mt-2 text-xl font-semibold tabular-nums text-slate-900">{money(a.balance)}</p>
-                <p className="text-xs text-slate-500">{a.bank} {a.number !== "—" ? `· ${a.number}` : ""}</p>
+                <p className="mt-2 text-xl font-semibold tabular-nums text-neutral-900">{money(a.balance)}</p>
+                <p className="text-xs text-neutral-500">{a.bank} {a.number !== "—" ? `· ${a.number}` : ""}</p>
               </Card>
             ))}
           </div>
@@ -80,7 +80,7 @@ export function FinancePage() {
             <StatCard label={t.overview.cash} value={money(sum(d.accounts.filter((a) => a.kind !== "bank").map((a) => a.balance)))} icon={<Wallet className="h-4 w-4" />} demo />
             <StatCard label={t.overview.bank} value={money(sum(d.accounts.filter((a) => a.kind === "bank").map((a) => a.balance)))} icon={<Landmark className="h-4 w-4" />} demo />
           </div>
-          <Section title={t.finance.closing} demo><LineChartCard money area data={d.cashflow} x="month" series={[{ key: "closing", label: t.finance.closing, color: "#0f172a" }]} /></Section>
+          <Section title={t.finance.closing} demo><LineChartCard money area data={d.cashflow} x="month" series={[{ key: "closing", label: t.finance.closing, color: brandColor("primary") }]} /></Section>
         </div>
       )}
 
@@ -101,7 +101,7 @@ export function FinancePage() {
                 <DataTable rows={rows as Array<Record<string, unknown> & { id: string }>} rowKey={(r) => r.id} exportName={tab === "ar" ? "receivable" : "payable"}
                   columns={[
                     tab === "ar"
-                      ? { key: "client", label: t.common.client, primary: true, render: (r) => <><p className="font-medium">{r.client as string}</p><p className="text-xs text-slate-500">{r.project as string}</p></>, value: (r) => `${r.client} ${r.project}` }
+                      ? { key: "client", label: t.common.client, primary: true, render: (r) => <><p className="font-medium">{r.client as string}</p><p className="text-xs text-neutral-500">{r.project as string}</p></>, value: (r) => `${r.client} ${r.project}` }
                       : { key: "supplier", label: t.finance.supplier, primary: true },
                     { key: "current", label: t.finance.current, kind: "money" },
                     { key: "d30", label: t.finance.d30, kind: "money" },
@@ -132,7 +132,7 @@ export function FinancePage() {
             ]}
             columns={[
               { key: "no", label: t.finance.invoiceNo, primary: true },
-              { key: "client", label: t.common.client, render: (r) => <><p>{r.client}</p><p className="text-xs text-slate-500">{r.project}</p></>, value: (r) => `${r.client} ${r.project}` },
+              { key: "client", label: t.common.client, render: (r) => <><p>{r.client}</p><p className="text-xs text-neutral-500">{r.project}</p></>, value: (r) => `${r.client} ${r.project}` },
               { key: "type", label: t.finance.invoiceType },
               { key: "due", label: t.finance.dueDate, kind: "date" },
               { key: "amount", label: t.common.amount, kind: "money" },
@@ -178,9 +178,9 @@ export function FinancePage() {
               ] as const).map(([title, lines, total]) => (
                 <PlBlock key={title} title={title} lines={lines} total={total} money={money} />
               ))}
-              <tr className="border-t-2 border-slate-300 font-semibold"><td className="py-2">{t.finance.grossProfit}</td><td className="py-2 text-right tabular-nums">{money(rev - cow)}</td></tr>
+              <tr className="border-t-2 border-neutral-300 font-semibold"><td className="py-2">{t.finance.grossProfit}</td><td className="py-2 text-right tabular-nums">{money(rev - cow)}</td></tr>
               <PlBlock title={t.finance.operating} lines={d.pl.operating} total={opx} money={money} />
-              <tr className="border-t-2 border-slate-900 text-base font-bold">
+              <tr className="border-t-2 border-neutral-900 text-base font-bold">
                 <td className="py-3">{t.finance.netProfit}</td>
                 <td className={cn("py-3 text-right tabular-nums", rev - cow - opx >= 0 ? "text-emerald-700" : "text-red-700")}>{money(rev - cow - opx)}</td>
               </tr>
@@ -192,7 +192,7 @@ export function FinancePage() {
       {tab === "cashflow" && (
         <div className="space-y-4">
           <Section title={t.finance.tabCashflow} demo>
-            <BarChartCard money data={d.cashflow} x="month" series={[{ key: "inflow", label: t.finance.inflow, color: "#0d9488" }, { key: "outflow", label: t.finance.outflow, color: "#e11d48" }]} />
+            <BarChartCard money data={d.cashflow} x="month" series={[{ key: "inflow", label: t.finance.inflow, color: brandColor("primary") }, { key: "outflow", label: t.finance.outflow, color: brandColor("danger") }]} />
           </Section>
           <DataTable rows={d.cashflow} rowKey={(r) => r.month} searchable={false} exportName="cash-flow" pageSize={12}
             columns={[
@@ -211,9 +211,9 @@ export function FinancePage() {
 function PlBlock({ title, lines, total, money }: { title: string; lines: ReadonlyArray<{ label: string; amount: number }>; total: number; money: (n: number) => string }) {
   return (
     <>
-      <tr><td colSpan={2} className="pb-1 pt-4 text-xs font-semibold uppercase tracking-wide text-slate-500">{title}</td></tr>
-      {lines.map((l) => <tr key={l.label}><td className="py-1 pl-3 text-slate-700">{l.label}</td><td className="py-1 text-right tabular-nums text-slate-700">{money(l.amount)}</td></tr>)}
-      <tr className="border-t border-slate-200 font-medium"><td className="py-1.5">{title}</td><td className="py-1.5 text-right tabular-nums">{money(total)}</td></tr>
+      <tr><td colSpan={2} className="pb-1 pt-4 text-xs font-semibold uppercase tracking-wide text-neutral-500">{title}</td></tr>
+      {lines.map((l) => <tr key={l.label}><td className="py-1 pl-3 text-neutral-700">{l.label}</td><td className="py-1 text-right tabular-nums text-neutral-700">{money(l.amount)}</td></tr>)}
+      <tr className="border-t border-neutral-200 font-medium"><td className="py-1.5">{title}</td><td className="py-1.5 text-right tabular-nums">{money(total)}</td></tr>
     </>
   );
 }

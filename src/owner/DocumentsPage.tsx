@@ -29,7 +29,7 @@ export function DocumentsPage() {
           <DataTable rows={docs} rowKey={(r) => r.id} selectedKey={selected} onRowClick={(r) => setSelected(r.id)} searchPlaceholder={t.documents.searchPlaceholder} exportName="documents"
             filters={[{ key: "category", label: t.common.category, options: [...new Set(docs.map((d) => d.category))].map((c) => ({ value: c, label: c })) }]}
             columns={[
-              { key: "title", label: t.common.name, primary: true, render: (r) => <><p className="font-medium text-slate-900">{r.title}</p><p className="text-xs text-slate-500">{r.linkedTo}</p></>, value: (r) => `${r.title} ${r.linkedTo}` },
+              { key: "title", label: t.common.name, primary: true, render: (r) => <><p className="font-medium text-neutral-900">{r.title}</p><p className="text-xs text-neutral-500">{r.linkedTo}</p></>, value: (r) => `${r.title} ${r.linkedTo}` },
               { key: "category", label: t.common.category, render: (r) => <Badge>{r.category}</Badge>, value: (r) => r.category },
               { key: "version", label: t.documents.version, render: (r) => `v${r.version}` },
               { key: "updated", label: t.documents.updated, kind: "date" },
@@ -49,24 +49,24 @@ export function DocumentsPage() {
                   { label: t.documents.expires, value: doc.expires ? formatDate(doc.expires, locale) : "—" },
                 ]} />
               </Section>
-              <Section title={t.documents.versions} actions={<History className="h-4 w-4 text-slate-400" />}>
+              <Section title={t.documents.versions} actions={<History className="h-4 w-4 text-neutral-400" />}>
                 <ol className="space-y-3">
                   {doc.versions.map((v) => (
                     <li key={v.v} className="flex gap-3">
-                      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-slate-100 text-xs font-semibold text-slate-700">v{v.v}</span>
+                      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-neutral-100 text-xs font-semibold text-neutral-700">v{v.v}</span>
                       <div className="min-w-0 text-sm">
-                        <p className="text-slate-900">{v.note || "—"}</p>
-                        <p className="text-xs text-slate-500">{v.by} · {formatDate(v.date, locale)} · {size(v.size)}</p>
+                        <p className="text-neutral-900">{v.note || "—"}</p>
+                        <p className="text-xs text-neutral-500">{v.by} · {formatDate(v.date, locale)} · {size(v.size)}</p>
                       </div>
                     </li>
                   ))}
                 </ol>
               </Section>
-              <Section title={t.documents.access} actions={<Lock className="h-4 w-4 text-slate-400" />}>
+              <Section title={t.documents.access} actions={<Lock className="h-4 w-4 text-neutral-400" />}>
                 <ul className="space-y-2 text-sm">
                   {doc.access.map((a) => (
                     <li key={a.who} className="flex items-center justify-between gap-2">
-                      <span className="text-slate-800">{a.who}</span>
+                      <span className="text-neutral-800">{a.who}</span>
                       {a.canEdit ? <Badge tone="amber"><Pencil className="mr-1 h-3 w-3" />{t.documents.canEdit}</Badge> : <Badge>{t.common.view}</Badge>}
                     </li>
                   ))}

@@ -91,7 +91,7 @@ export function ApprovalsPage() {
         <div className="hidden flex-wrap gap-1.5 md:flex">
           {TYPES.filter((ty) => ty === "all" || typeCounts[ty]).map((ty) => (
             <button key={ty} onClick={() => setType(ty)}
-              className={cn("rounded-full border px-3 py-1 text-sm", type === ty ? "border-ink-900 bg-ink-900 text-white" : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50")}>
+              className={cn("rounded-full border px-3 py-1 text-sm", type === ty ? "border-primary bg-primary text-primary-fg" : "border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-50")}>
               {t.approvals.types[ty]}{ty !== "all" && <span className="ml-1 opacity-70">{typeCounts[ty]}</span>}
             </button>
           ))}
@@ -107,15 +107,15 @@ export function ApprovalsPage() {
             {list.length === 0 ? (
               <EmptyState icon={<Inbox className="h-10 w-10" />} title={view === "pending" ? t.approvals.noPending : t.approvals.noHistory} />
             ) : (
-              <ul className="divide-y divide-slate-100">
+              <ul className="divide-y divide-neutral-100">
                 {list.map((r) => (
                   <li key={r.group}>
-                    <button onClick={() => select(r.group)} className={cn("flex w-full flex-col gap-1 px-4 py-3 text-left hover:bg-slate-50", selected === r.group && "bg-amber-50")}>
+                    <button onClick={() => select(r.group)} className={cn("flex w-full flex-col gap-1 px-4 py-3 text-left hover:bg-neutral-50", selected === r.group && "bg-primary-soft/50")}>
                       <div className="flex items-start justify-between gap-2">
-                        <span className="font-medium text-slate-900">{r.title}</span>
-                        {r.amount != null && <span className="shrink-0 text-sm font-semibold tabular-nums text-slate-900">{money(Number(r.amount))}</span>}
+                        <span className="font-medium text-neutral-900">{r.title}</span>
+                        {r.amount != null && <span className="shrink-0 text-sm font-semibold tabular-nums text-neutral-900">{money(Number(r.amount))}</span>}
                       </div>
-                      <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500">
+                      <div className="flex flex-wrap items-center gap-2 text-xs text-neutral-500">
                         <Badge>{t.approvals.types[r.type as keyof typeof t.approvals.types] ?? r.type}</Badge>
                         <span>{r.requesterName}</span>
                         <span>· {timeAgo(r.lastDecided ?? r.createdAt, t)}</span>
@@ -171,9 +171,9 @@ function RequestDetail({ request, threshold, onDecided }: { request: Request; th
   const icon = (s: Step) => {
     if (s.status === "approved") return <CheckCircle2 className="h-5 w-5 text-emerald-600" />;
     if (s.status === "rejected") return <XCircle className="h-5 w-5 text-red-600" />;
-    if (s.status === "skipped" || s.status === "cancelled") return <CircleSlash className="h-5 w-5 text-slate-400" />;
+    if (s.status === "skipped" || s.status === "cancelled") return <CircleSlash className="h-5 w-5 text-neutral-400" />;
     if (s.id === cur?.id) return <Clock className="h-5 w-5 text-amber-500" />;
-    return <Circle className="h-5 w-5 text-slate-300" />;
+    return <Circle className="h-5 w-5 text-neutral-300" />;
   };
 
   return (
@@ -181,34 +181,34 @@ function RequestDetail({ request, threshold, onDecided }: { request: Request; th
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0">
           <Badge>{t.approvals.types[request.type as keyof typeof t.approvals.types] ?? request.type}</Badge>
-          <h2 className="mt-2 text-lg font-semibold text-slate-900">{request.title}</h2>
-          <p className="mt-1 text-sm text-slate-500">
-            {t.approvals.requestedBy} <span className="font-medium text-slate-700">{request.requesterName}</span> · {new Date(request.createdAt).toLocaleString(locale, { dateStyle: "medium", timeStyle: "short" })}
+          <h2 className="mt-2 text-lg font-semibold text-neutral-900">{request.title}</h2>
+          <p className="mt-1 text-sm text-neutral-500">
+            {t.approvals.requestedBy} <span className="font-medium text-neutral-700">{request.requesterName}</span> · {new Date(request.createdAt).toLocaleString(locale, { dateStyle: "medium", timeStyle: "short" })}
           </p>
         </div>
         <div className="text-right">
-          {request.amount != null && <p className="text-2xl font-semibold tabular-nums text-slate-900">{money(Number(request.amount))}</p>}
+          {request.amount != null && <p className="text-2xl font-semibold tabular-nums text-neutral-900">{money(Number(request.amount))}</p>}
           {request.amount != null && Number(request.amount) > threshold && <p className="text-xs text-amber-700">{fmt(t.approvals.largePayment, { amount: money(threshold) })}</p>}
           <div className="mt-1"><StatusBadge value={request.overall} /></div>
         </div>
       </div>
 
-      <h3 className="mb-3 mt-6 text-xs font-semibold uppercase tracking-wide text-slate-500">{t.approvals.steps}</h3>
+      <h3 className="mb-3 mt-6 text-xs font-semibold uppercase tracking-wide text-neutral-500">{t.approvals.steps}</h3>
       <ol className="space-y-3">
         {request.steps.map((s) => (
           <li key={s.id} className="flex gap-3">
             <span className="mt-0.5">{icon(s)}</span>
-            <div className="min-w-0 flex-1 rounded-lg border border-slate-100 bg-slate-50 px-3 py-2">
+            <div className="min-w-0 flex-1 rounded-lg border border-neutral-100 bg-neutral-50 px-3 py-2">
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <span className="text-sm font-medium text-slate-900">{fmt(t.approvals.step, { n: s.step_order })} · {s.role ? t.roles[s.role.code] : ""}</span>
+                <span className="text-sm font-medium text-neutral-900">{fmt(t.approvals.step, { n: s.step_order })} · {s.role ? t.roles[s.role.code] : ""}</span>
                 <StatusBadge value={s.id === cur?.id ? "waiting" : s.status} />
               </div>
               {(s.approver || s.decided_at) && (
-                <p className="mt-0.5 text-xs text-slate-500">
+                <p className="mt-0.5 text-xs text-neutral-500">
                   {s.approver ? fmt(t.approvals.decidedBy, { name: s.approver.full_name }) : ""}{s.decided_at ? ` · ${timeAgo(s.decided_at, t)}` : ""}
                 </p>
               )}
-              {s.comment && <p className="mt-1 text-sm text-slate-700">“{s.comment}”</p>}
+              {s.comment && <p className="mt-1 text-sm text-neutral-700">“{s.comment}”</p>}
             </div>
           </li>
         ))}
@@ -217,7 +217,7 @@ function RequestDetail({ request, threshold, onDecided }: { request: Request; th
       {msg && !rejecting && <div className="mt-4"><Alert tone={msg.tone}>{msg.text}</Alert></div>}
 
       {cur && (
-        <div className="mt-5 border-t border-slate-100 pt-4">
+        <div className="mt-5 border-t border-neutral-100 pt-4">
           {isRequester ? <Alert tone="info">{t.approvals.youRequested}</Alert>
             : !hasRole ? <Alert tone="info">{fmt(t.approvals.notYourStep, { role: cur.role ? t.roles[cur.role.code] : "" })}</Alert>
             : (

@@ -51,7 +51,7 @@ export function LoginPage() {
           {busy ? t.auth.signingIn : t.auth.signIn}
         </Button>
         <p className="text-center text-sm">
-          <Link to="/forgot-password" className="font-medium text-brand-700 hover:underline">{t.auth.forgot}</Link>
+          <Link to="/forgot-password" className="font-medium text-primary hover:underline">{t.auth.forgot}</Link>
         </p>
       </form>
     </AuthLayout>
@@ -80,7 +80,7 @@ export function ForgotPasswordPage() {
       {sent ? (
         <div className="space-y-4">
           <Alert tone="success">{t.auth.linkSent}</Alert>
-          <Link to="/login" className="block text-center text-sm font-medium text-brand-700 hover:underline">{t.auth.backToSignIn}</Link>
+          <Link to="/login" className="block text-center text-sm font-medium text-primary hover:underline">{t.auth.backToSignIn}</Link>
         </div>
       ) : (
         <form onSubmit={submit} className="space-y-4">
@@ -88,7 +88,7 @@ export function ForgotPasswordPage() {
             <Input id="email" type="email" autoComplete="username" required value={email} onChange={(e) => setEmail(e.target.value)} />
           </Field>
           <Button type="submit" className="w-full" loading={busy}>{busy ? t.auth.sending : t.auth.sendLink}</Button>
-          <Link to="/login" className="block text-center text-sm font-medium text-brand-700 hover:underline">{t.auth.backToSignIn}</Link>
+          <Link to="/login" className="block text-center text-sm font-medium text-primary hover:underline">{t.auth.backToSignIn}</Link>
         </form>
       )}
     </AuthLayout>
@@ -118,7 +118,7 @@ export function ResetPasswordPage() {
       {ready === "missing" && (
         <div className="space-y-4">
           <Alert tone="error">{t.auth.resetMissing}</Alert>
-          <Link to="/forgot-password" className="block text-center text-sm font-medium text-brand-700 hover:underline">{t.auth.forgotTitle}</Link>
+          <Link to="/forgot-password" className="block text-center text-sm font-medium text-primary hover:underline">{t.auth.forgotTitle}</Link>
         </div>
       )}
       {ready === "ok" && <NewPasswordForm onDone={() => navigate("/", { replace: true })} />}
@@ -208,7 +208,7 @@ export function MfaChallengePage() {
             className="text-center font-mono text-lg tracking-[0.4em]" value={code} onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))} />
         </Field>
         <Button type="submit" className="w-full" loading={busy} disabled={code.length !== 6}>{busy ? t.auth.mfaVerifying : t.auth.mfaVerify}</Button>
-        <button type="button" onClick={() => auth.signOut()} className="block w-full text-center text-sm font-medium text-slate-600 hover:underline">{t.auth.signOut}</button>
+        <button type="button" onClick={() => auth.signOut()} className="block w-full text-center text-sm font-medium text-neutral-600 hover:underline">{t.auth.signOut}</button>
       </form>
     </AuthLayout>
   );
@@ -225,7 +225,7 @@ export function MfaSetupPage() {
   return (
     <AuthLayout title={t.auth.mfaTitle} subtitle={t.auth.mfaRequired}>
       <MfaEnroll onDone={() => auth.refresh()} />
-      <button type="button" onClick={() => auth.signOut()} className="mt-6 block w-full text-center text-sm font-medium text-slate-600 hover:underline">{t.auth.signOut}</button>
+      <button type="button" onClick={() => auth.signOut()} className="mt-6 block w-full text-center text-sm font-medium text-neutral-600 hover:underline">{t.auth.signOut}</button>
     </AuthLayout>
   );
 }

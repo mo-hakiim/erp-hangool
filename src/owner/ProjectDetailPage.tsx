@@ -8,7 +8,7 @@ import { useCompany } from "@/features/settings/CompanySettings";
 import { Alert, Badge, Button, EmptyState, Field, Input, PageHeader, Spinner } from "@/components/ui";
 import { InfoGrid, LiveBadge, Modal, ProgressBar, Section, Select, StatCard, StatusBadge, Tabs, statusLabel } from "@/components/blocks";
 import { DataTable } from "@/components/DataTable";
-import { BarChartCard } from "@/components/charts";
+import { BarChartCard, brandColor } from "@/components/charts";
 import { must, useLoad } from "./useQuery";
 
 type Stage = {
@@ -51,7 +51,7 @@ export function ProjectDetailPage() {
   if (error) return <Alert tone="error">{fmt(t.common.loadError, { msg: error })}</Alert>;
   if (!data?.project) {
     return (
-      <EmptyState title={t.projects.notFound} action={<Link to="/owner/projects" className="text-sm font-medium text-brand-700 hover:underline">{t.projects.backToList}</Link>} />
+      <EmptyState title={t.projects.notFound} action={<Link to="/owner/projects" className="text-sm font-medium text-primary hover:underline">{t.projects.backToList}</Link>} />
     );
   }
 
@@ -74,7 +74,7 @@ export function ProjectDetailPage() {
 
   return (
     <div>
-      <Link to="/owner/projects" className="mb-3 inline-flex items-center gap-1 text-sm font-medium text-slate-600 hover:text-slate-900">
+      <Link to="/owner/projects" className="mb-3 inline-flex items-center gap-1 text-sm font-medium text-neutral-600 hover:text-neutral-900">
         <ArrowLeft className="h-4 w-4" /> {t.projects.backToList}
       </Link>
       <PageHeader
@@ -96,7 +96,7 @@ export function ProjectDetailPage() {
         <div className="grid gap-4 lg:grid-cols-3">
           <Section title={t.projects.tabOverview} className="lg:col-span-2">
             <InfoGrid items={[
-              { label: t.common.client, value: <>{p.client?.name}<br /><span className="text-xs text-slate-500">{[p.client?.phone, p.client?.email].filter(Boolean).join(" · ")}</span></> },
+              { label: t.common.client, value: <>{p.client?.name}<br /><span className="text-xs text-neutral-500">{[p.client?.phone, p.client?.email].filter(Boolean).join(" · ")}</span></> },
               { label: t.projects.manager, value: p.manager?.full_name ?? t.projects.noManager },
               { label: t.projects.startDate, value: formatDate(p.start_date as string, locale) },
               { label: t.projects.endDate, value: formatDate(p.end_date as string, locale) },
@@ -105,13 +105,13 @@ export function ProjectDetailPage() {
               { label: t.common.description, value: (p.description as string) || "—" },
             ]} />
           </Section>
-          <Section title={t.projects.team} actions={<Users className="h-4 w-4 text-slate-400" />}>
-            {data.members.length === 0 && !p.manager ? <p className="text-sm text-slate-500">—</p> : (
+          <Section title={t.projects.team} actions={<Users className="h-4 w-4 text-neutral-400" />}>
+            {data.members.length === 0 && !p.manager ? <p className="text-sm text-neutral-500">—</p> : (
               <ul className="space-y-2.5 text-sm">
-                {p.manager && <li className="flex justify-between gap-2"><span className="font-medium text-slate-900">{p.manager.full_name}</span><Badge tone="amber">{t.roles.project_manager}</Badge></li>}
+                {p.manager && <li className="flex justify-between gap-2"><span className="font-medium text-neutral-900">{p.manager.full_name}</span><Badge tone="amber">{t.roles.project_manager}</Badge></li>}
                 {data.members.map((m) => (
                   <li key={m.id} className="flex justify-between gap-2">
-                    <span className="truncate text-slate-800">{m.user?.full_name}</span>
+                    <span className="truncate text-neutral-800">{m.user?.full_name}</span>
                     <Badge>{m.role ? t.roles[m.role.code as keyof typeof t.roles] : ""}</Badge>
                   </li>
                 ))}
@@ -119,8 +119,8 @@ export function ProjectDetailPage() {
             )}
           </Section>
           <Section title={t.projects.tabStages} className="lg:col-span-3">
-            {data.stages.length === 0 ? <p className="text-sm text-slate-500">{t.projects.noStages}</p> : (
-              <BarChartCard height={220} x="name" data={data.stages.map((st) => ({ name: st.name, progress: st.progress_pct }))} series={[{ key: "progress", label: t.projects.progressPct, color: "#f59e0b" }]} />
+            {data.stages.length === 0 ? <p className="text-sm text-neutral-500">{t.projects.noStages}</p> : (
+              <BarChartCard height={220} x="name" data={data.stages.map((st) => ({ name: st.name, progress: st.progress_pct }))} series={[{ key: "progress", label: t.projects.progressPct, color: brandColor("gold") }]} />
             )}
           </Section>
         </div>
@@ -168,10 +168,10 @@ export function ProjectDetailPage() {
             {data.reports.map((r) => (
               <li key={r.id as string}>
                 <Section title={`${formatDate(r.report_date as string, locale)} · ${(r.stage as { name: string } | null)?.name ?? ""}`}
-                  actions={<div className="flex items-center gap-2 text-xs text-slate-500">{(r.author as { full_name: string } | null)?.full_name}{r.visible_to_client ? <Badge tone="blue">{t.projects.visibleToClient}</Badge> : null}</div>}>
-                  <p className="text-sm text-slate-800">{r.progress as string}</p>
+                  actions={<div className="flex items-center gap-2 text-xs text-neutral-500">{(r.author as { full_name: string } | null)?.full_name}{r.visible_to_client ? <Badge tone="blue">{t.projects.visibleToClient}</Badge> : null}</div>}>
+                  <p className="text-sm text-neutral-800">{r.progress as string}</p>
                   {r.problems ? <p className="mt-2 text-sm text-red-700"><span className="font-medium">{t.projects.problems}:</span> {r.problems as string}</p> : null}
-                  <p className="mt-2 text-xs text-slate-500">{t.projects.workers}: {r.workers_present as number}{r.weather ? ` · ${r.weather}` : ""}</p>
+                  <p className="mt-2 text-xs text-neutral-500">{t.projects.workers}: {r.workers_present as number}{r.weather ? ` · ${r.weather}` : ""}</p>
                 </Section>
               </li>
             ))}
@@ -182,7 +182,7 @@ export function ProjectDetailPage() {
       {tab === "photos" && (
         <Section title={t.projects.tabPhotos}>
           {photos.length === 0 ? <EmptyState icon={<Camera className="h-10 w-10" />} title={t.projects.noPhotos} /> : (
-            <ul className="grid grid-cols-2 gap-3 sm:grid-cols-4">{photos.map((ph) => <li key={ph} className="aspect-square truncate rounded-lg bg-slate-100 p-2 text-xs text-slate-500">{ph}</li>)}</ul>
+            <ul className="grid grid-cols-2 gap-3 sm:grid-cols-4">{photos.map((ph) => <li key={ph} className="aspect-square truncate rounded-lg bg-neutral-100 p-2 text-xs text-neutral-500">{ph}</li>)}</ul>
           )}
         </Section>
       )}
@@ -275,8 +275,8 @@ function StagesTab({ projectId, projectName, stages, pending, invoices, onChange
         {msg && <Alert tone={msg.tone}>{msg.text}</Alert>}
         {stages.length === 0 ? <EmptyState title={t.projects.noStages} /> : (
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-slate-100 text-sm">
-              <thead className="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
+            <table className="min-w-full divide-y divide-neutral-100 text-sm">
+              <thead className="bg-neutral-50 text-xs uppercase tracking-wide text-neutral-500">
                 <tr>
                   <th className="px-3 py-2 text-left">#</th>
                   <th className="px-3 py-2 text-left">{t.projects.stageName}</th>
@@ -289,19 +289,19 @@ function StagesTab({ projectId, projectName, stages, pending, invoices, onChange
                   <th className="px-3 py-2 text-right">{t.common.actions}</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody className="divide-y divide-neutral-100">
                 {stages.map((st) => {
                   const invoiced = invoices.filter((i) => i.stage_id === st.id).reduce((s, i) => s + Number(i.amount), 0);
                   return (
                     <tr key={st.id}>
-                      <td className="px-3 py-2.5 text-slate-500">{st.seq}</td>
-                      <td className="px-3 py-2.5 font-medium capitalize text-slate-900">{st.name}</td>
+                      <td className="px-3 py-2.5 text-neutral-500">{st.seq}</td>
+                      <td className="px-3 py-2.5 font-medium capitalize text-neutral-900">{st.name}</td>
                       <td className="whitespace-nowrap px-3 py-2.5">{formatDate(st.planned_start, locale)}</td>
                       <td className="whitespace-nowrap px-3 py-2.5">{formatDate(st.planned_end, locale)}</td>
                       <td className="whitespace-nowrap px-3 py-2.5 text-right tabular-nums">{money(st.budget_amount)}</td>
                       <td className="whitespace-nowrap px-3 py-2.5 text-right tabular-nums">
                         {money(st.milestone_amount)}
-                        {invoiced > 0 && <div className="text-[11px] text-slate-500">{t.projects.invoiced}: {money(invoiced)}</div>}
+                        {invoiced > 0 && <div className="text-[11px] text-neutral-500">{t.projects.invoiced}: {money(invoiced)}</div>}
                       </td>
                       <td className="min-w-[120px] px-3 py-2.5"><ProgressBar value={st.progress_pct} tone={st.status === "verified" ? "green" : "brand"} /></td>
                       <td className="px-3 py-2.5">
@@ -325,7 +325,7 @@ function StagesTab({ projectId, projectName, stages, pending, invoices, onChange
                   );
                 })}
               </tbody>
-              <tfoot className="bg-slate-50 text-sm font-medium">
+              <tfoot className="bg-neutral-50 text-sm font-medium">
                 <tr>
                   <td className="px-3 py-2" colSpan={4}>{t.common.total}</td>
                   <td className="px-3 py-2 text-right tabular-nums">{money(totalBudget)}</td>
@@ -336,7 +336,7 @@ function StagesTab({ projectId, projectName, stages, pending, invoices, onChange
             </table>
           </div>
         )}
-        {stages.some((s) => s.status === "verified") && <p className="text-xs text-slate-500">{t.projects.verifiedNote}</p>}
+        {stages.some((s) => s.status === "verified") && <p className="text-xs text-neutral-500">{t.projects.verifiedNote}</p>}
       </div>
       {editing && (
         <StageModal

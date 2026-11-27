@@ -5,7 +5,7 @@ import { useCompany } from "@/features/settings/CompanySettings";
 import { Badge, PageHeader } from "@/components/ui";
 import { DemoBadge, Section, StatCard, Tabs, statusLabel } from "@/components/blocks";
 import { DataTable } from "@/components/DataTable";
-import { BarChartCard } from "@/components/charts";
+import { BarChartCard, brandColor } from "@/components/charts";
 import { procurementDemo as d } from "@/demo/ownerDemo";
 
 type Tab = "requests" | "quotes" | "orders" | "suppliers" | "history";
@@ -38,7 +38,7 @@ export function ProcurementPage() {
           filters={[{ key: "status", label: t.common.status, options: opts(["submitted", "pm_approved", "sourcing", "ordered", "delivered", "issued", "rejected"]) }]}
           columns={[
             { key: "no", label: t.procurement.requestNo, primary: true },
-            { key: "project", label: t.common.project, render: (r) => <><p>{r.project}</p><p className="text-xs capitalize text-slate-500">{r.stage}</p></>, value: (r) => `${r.project} ${r.stage}` },
+            { key: "project", label: t.common.project, render: (r) => <><p>{r.project}</p><p className="text-xs capitalize text-neutral-500">{r.stage}</p></>, value: (r) => `${r.project} ${r.stage}` },
             { key: "requestedBy", label: t.procurement.requestedBy, hideOnMobile: true },
             { key: "neededBy", label: t.procurement.neededBy, kind: "date" },
             { key: "items", label: t.procurement.items, kind: "number" },
@@ -72,13 +72,13 @@ export function ProcurementPage() {
       {tab === "suppliers" && (
         <div className="space-y-4">
           <Section title={t.procurement.spendBySupplier} demo>
-            <BarChartCard money horizontal height={240} data={d.suppliers.map((s) => ({ name: s.name, spent: s.spent }))} x="name" series={[{ key: "spent", label: t.procurement.totalSpent, color: "#0f172a" }]} />
+            <BarChartCard money horizontal height={240} data={d.suppliers.map((s) => ({ name: s.name, spent: s.spent }))} x="name" series={[{ key: "spent", label: t.procurement.totalSpent, color: brandColor("primary") }]} />
           </Section>
           <DataTable rows={d.suppliers} rowKey={(r) => r.id} exportName="suppliers"
             filters={[{ key: "category", label: t.common.category, options: [...new Set(d.suppliers.map((s) => s.category))].map((c) => ({ value: c, label: c })) }]}
             columns={[
               { key: "name", label: t.common.name, primary: true },
-              { key: "contact", label: t.procurement.contact, render: (r) => <><p>{r.contact}</p><p className="text-xs text-slate-500">{r.phone}</p></>, value: (r) => `${r.contact} ${r.phone}` },
+              { key: "contact", label: t.procurement.contact, render: (r) => <><p>{r.contact}</p><p className="text-xs text-neutral-500">{r.phone}</p></>, value: (r) => `${r.contact} ${r.phone}` },
               { key: "category", label: t.common.category },
               { key: "terms", label: t.procurement.terms, hideOnMobile: true },
               { key: "orders", label: t.procurement.orders, kind: "number" },

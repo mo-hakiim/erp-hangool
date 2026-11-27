@@ -91,8 +91,8 @@ export function SettingsPage() {
         <Section title={t.settings.security}>
           <div className="flex items-start justify-between gap-4">
             <div>
-              <label htmlFor="c-2fa" className="text-sm font-medium text-slate-900">{t.settings.require2fa}</label>
-              <p className="mt-0.5 text-sm text-slate-500">{t.settings.require2faHint}</p>
+              <label htmlFor="c-2fa" className="text-sm font-medium text-neutral-900">{t.settings.require2fa}</label>
+              <p className="mt-0.5 text-sm text-neutral-500">{t.settings.require2faHint}</p>
             </div>
             <Toggle id="c-2fa" label={t.settings.require2fa} checked={s.require2fa} onChange={(v) => setS((x) => ({ ...x, require2fa: v }))} />
           </div>

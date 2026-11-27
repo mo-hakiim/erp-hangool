@@ -79,35 +79,35 @@ export function AuditPage() {
       {error && <div className="mb-4"><Alert tone="error">{fmt(t.common.loadError, { msg: error })}</Alert></div>}
       <Card>
         {loading && !data ? <Spinner /> : rows.length === 0 ? <EmptyState title={t.common.noResults} body={t.common.noResultsBody} /> : (
-          <ul className="divide-y divide-slate-100">
+          <ul className="divide-y divide-neutral-100">
             {rows.map((e) => {
               const ch = changes(e);
               const isOpen = open === e.id;
               return (
                 <Fragment key={e.id}>
                   <li>
-                    <button onClick={() => setOpen(isOpen ? null : e.id)} className="flex w-full items-start gap-3 px-4 py-3 text-left hover:bg-slate-50" aria-expanded={isOpen}>
-                      {isOpen ? <ChevronDown className="mt-0.5 h-4 w-4 shrink-0 text-slate-400" /> : <ChevronRight className="mt-0.5 h-4 w-4 shrink-0 text-slate-400" />}
+                    <button onClick={() => setOpen(isOpen ? null : e.id)} className="flex w-full items-start gap-3 px-4 py-3 text-left hover:bg-neutral-50" aria-expanded={isOpen}>
+                      {isOpen ? <ChevronDown className="mt-0.5 h-4 w-4 shrink-0 text-neutral-400" /> : <ChevronRight className="mt-0.5 h-4 w-4 shrink-0 text-neutral-400" />}
                       <div className="grid min-w-0 flex-1 gap-1 sm:grid-cols-[170px_160px_110px_1fr] sm:items-center sm:gap-3">
-                        <span className="text-xs tabular-nums text-slate-500">{new Date(e.created_at).toLocaleString(locale, { dateStyle: "medium", timeStyle: "short" })}</span>
-                        <span className="truncate text-sm font-medium text-slate-900">{actorName(e.actor_id)}</span>
+                        <span className="text-xs tabular-nums text-neutral-500">{new Date(e.created_at).toLocaleString(locale, { dateStyle: "medium", timeStyle: "short" })}</span>
+                        <span className="truncate text-sm font-medium text-neutral-900">{actorName(e.actor_id)}</span>
                         <span><Badge tone={tone[e.action] ?? "slate"}>{t.audit.actions[e.action as keyof typeof t.audit.actions] ?? e.action}</Badge></span>
-                        <span className="truncate text-sm text-slate-600"><span className="font-mono text-xs text-slate-800">{e.table_name}</span>{ch.length ? ` · ${ch.slice(0, 3).map((c) => c.field).join(", ")}${ch.length > 3 ? "…" : ""}` : ""}</span>
+                        <span className="truncate text-sm text-neutral-600"><span className="font-mono text-xs text-neutral-800">{e.table_name}</span>{ch.length ? ` · ${ch.slice(0, 3).map((c) => c.field).join(", ")}${ch.length > 3 ? "…" : ""}` : ""}</span>
                       </div>
                     </button>
                   </li>
                   {isOpen && (
-                    <li className="bg-slate-50 px-4 py-3">
-                      <p className="mb-2 text-xs text-slate-500">{t.audit.record}: <span className="font-mono">{e.record_id}</span></p>
-                      {ch.length === 0 ? <p className="text-sm text-slate-500">{t.audit.noChanges}</p> : (
+                    <li className="bg-neutral-50 px-4 py-3">
+                      <p className="mb-2 text-xs text-neutral-500">{t.audit.record}: <span className="font-mono">{e.record_id}</span></p>
+                      {ch.length === 0 ? <p className="text-sm text-neutral-500">{t.audit.noChanges}</p> : (
                         <div className="overflow-x-auto">
                           <table className="min-w-full text-sm">
-                            <thead><tr className="text-left text-xs uppercase tracking-wide text-slate-500"><th className="py-1 pr-4">{t.audit.field}</th><th className="py-1 pr-4">{t.audit.before}</th><th className="py-1">{t.audit.after}</th></tr></thead>
+                            <thead><tr className="text-left text-xs uppercase tracking-wide text-neutral-500"><th className="py-1 pr-4">{t.audit.field}</th><th className="py-1 pr-4">{t.audit.before}</th><th className="py-1">{t.audit.after}</th></tr></thead>
                             <tbody>
                               {ch.map((c) => (
                                 <tr key={c.field} className="align-top">
-                                  <td className="py-1 pr-4 font-mono text-xs text-slate-700">{c.field}</td>
-                                  <td className={cn("max-w-xs break-all py-1 pr-4 text-red-700", e.action === "create" && "text-slate-400")}>{show(c.before)}</td>
+                                  <td className="py-1 pr-4 font-mono text-xs text-neutral-700">{c.field}</td>
+                                  <td className={cn("max-w-xs break-all py-1 pr-4 text-red-700", e.action === "create" && "text-neutral-400")}>{show(c.before)}</td>
                                   <td className="max-w-xs break-all py-1 text-emerald-700">{show(c.after)}</td>
                                 </tr>
                               ))}
@@ -124,7 +124,7 @@ export function AuditPage() {
         )}
       </Card>
       {total > 0 && (
-        <div className="mt-3 flex items-center justify-between text-sm text-slate-600">
+        <div className="mt-3 flex items-center justify-between text-sm text-neutral-600">
           <span>{fmt(t.common.rowsShown, { from: page * PAGE + 1, to: Math.min(total, (page + 1) * PAGE), total })}</span>
           <div className="flex gap-2">
             <Button size="sm" variant="secondary" disabled={page === 0} onClick={() => setPage(page - 1)}>{t.common.prev}</Button>

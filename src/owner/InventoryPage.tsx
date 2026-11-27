@@ -5,7 +5,7 @@ import { useCompany } from "@/features/settings/CompanySettings";
 import { PageHeader } from "@/components/ui";
 import { DemoBadge, ProgressBar, Section, StatCard, StatusBadge, Tabs, statusLabel } from "@/components/blocks";
 import { DataTable } from "@/components/DataTable";
-import { BarChartCard } from "@/components/charts";
+import { BarChartCard, brandColor } from "@/components/charts";
 import { inventoryDemo as d } from "@/demo/ownerDemo";
 
 type Tab = "stock" | "moves" | "low" | "damaged" | "issued";
@@ -86,7 +86,7 @@ export function InventoryPage() {
       )}
       {tab === "issued" && (
         <div className="space-y-4">
-          <Section title={t.inventory.tabIssued} demo><BarChartCard money data={byProject} x="project" series={[{ key: "value", label: t.inventory.value, color: "#f59e0b" }]} /></Section>
+          <Section title={t.inventory.tabIssued} demo><BarChartCard money data={byProject} x="project" series={[{ key: "value", label: t.inventory.value, color: brandColor("gold") }]} /></Section>
           <DataTable rows={issued} rowKey={(r) => r.id} exportName="issued-to-site"
             columns={[
               { key: "date", label: t.common.date, kind: "date" },

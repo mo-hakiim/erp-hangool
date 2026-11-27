@@ -2,9 +2,56 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * Hangool brand theme — the ONE place to change colors.
+ * Source: the company website (hangool website/src/styles.css, "Hangool identity" palette),
+ * converted from oklch to RGB channels so Tailwind opacity modifiers (bg-primary/20) work.
+ * Values are "R G B".
+ */
+:root {
+  /* Brand */
+  --primary: 23 61 42;          /* #173d2a  deep green  oklch(0.326 0.056 159) */
+  --primary-fg: 252 252 249;    /* #fcfcf9  on green     oklch(0.99 0.003 92)  */
+  --primary-dark: 17 45 30;     /* #112d1e  deep-green   oklch(0.269 0.043 159) */
+  --primary-soft: 217 236 225;  /* #d9ece1  accent       oklch(0.926 0.025 159) */
+  --gold: 209 166 43;           /* #d1a62b  secondary    oklch(0.745 0.14 88)   */
+  --gold-fg: 11 36 23;          /* #0b2417  on gold      oklch(0.235 0.04 159)  */
+  --gold-soft: 247 243 232;     /* #f7f3e8  ivory        oklch(0.965 0.016 92)  */
+  --surface: 255 255 255;       /* cards */
+  --danger: 231 0 11;           /* #e7000b  destructive  oklch(0.577 0.245 27.3) */
+
+  /* Neutrals: brand background, muted, border, muted text and text, with even steps between them */
+  --n-50: 250 248 243;   /* #faf8f3  background */
+  --n-100: 243 239 228;  /* #f3efe4  muted */
+  --n-200: 222 218 206;  /* #dedace  border */
+  --n-300: 189 188 178;
+  --n-400: 149 153 144;
+  --n-500: 90 99 93;     /* #5a635d  muted text */
+  --n-600: 70 76 72;
+  --n-700: 56 60 58;
+  --n-800: 45 47 46;
+  --n-900: 34 34 34;     /* #222222  text */
+
+  /* Charts (read by src/components/charts.tsx) */
+  --chart-1: var(--primary);
+  --chart-2: var(--gold);
+  --chart-3: 120 149 134;   /* between primary and accent */
+  --chart-4: var(--n-500);
+  --chart-5: 228 205 138;   /* between gold and ivory */
+  --chart-6: var(--danger);
+  --chart-soft: var(--primary-soft);
+}
+
 @layer base {
   html { -webkit-text-size-adjust: 100%; }
-  body { @apply bg-slate-50 text-slate-900 antialiased; }
+  body { @apply bg-neutral-50 font-sans text-neutral-900 antialiased; }
+  h1, h2, h3 { @apply font-display; letter-spacing: -0.01em; }
+  ::selection { background: rgb(var(--gold) / 0.35); }
   /* 16px inputs on phones stop iOS from zooming in */
   @media (max-width: 640px) { input, select, textarea { font-size: 16px !important; } }
+}
+
+@layer components {
+  /* Thin, quiet scrollbars inside panels */
+  .scroll-thin { scrollbar-width: thin; scrollbar-color: rgb(var(--n-300)) transparent; }
 }

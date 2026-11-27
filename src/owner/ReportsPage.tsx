@@ -64,10 +64,10 @@ export function ReportsPage() {
   return (
     <div>
       <PageHeader title={t.reports.title} subtitle={t.reports.subtitle} actions={<DemoBadge />} />
-      <div className="mb-5 inline-flex rounded-lg border border-slate-200 bg-white p-1" role="tablist">
+      <div className="mb-5 inline-flex rounded-lg border border-neutral-200 bg-white p-1" role="tablist">
         {(["daily", "weekly", "monthly"] as const).map((p) => (
           <button key={p} role="tab" aria-selected={period === p} onClick={() => setPeriod(p)}
-            className={cn("rounded-md px-3 py-1.5 text-sm font-medium", period === p ? "bg-ink-900 text-white" : "text-slate-600 hover:bg-slate-100")}>{t.reports[p]}</button>
+            className={cn("rounded-lg px-3 py-1.5 text-sm font-semibold transition-colors", period === p ? "bg-primary text-primary-fg shadow-sm" : "text-neutral-600 hover:bg-neutral-100")}>{t.reports[p]}</button>
         ))}
       </div>
       <ul className="mb-6 grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-6">
@@ -76,10 +76,10 @@ export function ReportsPage() {
           return (
             <li key={c}>
               <button onClick={() => setCat(c)} className="h-full w-full text-left">
-                <Card className={cn("h-full p-4 transition-colors hover:border-brand-300", cat === c && "border-brand-500 ring-1 ring-brand-500")}>
-                  <Icon className="h-5 w-5 text-brand-600" />
-                  <p className="mt-2 font-medium text-slate-900">{t.reports.categories[c]}</p>
-                  <p className="mt-0.5 text-xs text-slate-500">{t.reports.descriptions[c]}</p>
+                <Card className={cn("h-full p-4 transition-colors hover:border-primary/40", cat === c && "border-gold ring-1 ring-gold")}>
+                  <Icon className="h-5 w-5 text-primary" />
+                  <p className="mt-2 font-medium text-neutral-900">{t.reports.categories[c]}</p>
+                  <p className="mt-0.5 text-xs text-neutral-500">{t.reports.descriptions[c]}</p>
                 </Card>
               </button>
             </li>
@@ -92,12 +92,12 @@ export function ReportsPage() {
           <Button size="sm" onClick={() => exportPdf(title, report.head, report.rows, fmt(t.reports.generatedFor, { period: periodLabel }))}><FileText className="h-4 w-4" /> {t.reports.exportPdf}</Button>
         </div>
       }>
-        <p className="mb-3 text-sm text-slate-500">{fmt(t.reports.generatedFor, { period: periodLabel })}</p>
+        <p className="mb-3 text-sm text-neutral-500">{fmt(t.reports.generatedFor, { period: periodLabel })}</p>
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-slate-100 text-sm">
-            <thead className="bg-slate-50"><tr>{report.head.map((h) => <th key={h} className="whitespace-nowrap px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">{h}</th>)}</tr></thead>
-            <tbody className="divide-y divide-slate-100">
-              {report.rows.map((r, i) => <tr key={i}>{r.map((c, j) => <td key={j} className={cn("whitespace-nowrap px-3 py-2", j === 0 ? "font-medium text-slate-900" : "text-slate-700")}>{c}</td>)}</tr>)}
+          <table className="min-w-full divide-y divide-neutral-100 text-sm">
+            <thead className="bg-neutral-50"><tr>{report.head.map((h) => <th key={h} className="whitespace-nowrap px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-neutral-500">{h}</th>)}</tr></thead>
+            <tbody className="divide-y divide-neutral-100">
+              {report.rows.map((r, i) => <tr key={i}>{r.map((c, j) => <td key={j} className={cn("whitespace-nowrap px-3 py-2", j === 0 ? "font-medium text-neutral-900" : "text-neutral-700")}>{c}</td>)}</tr>)}
             </tbody>
           </table>
         </div>

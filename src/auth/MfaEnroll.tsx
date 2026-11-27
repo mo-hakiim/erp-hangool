@@ -47,15 +47,15 @@ export function MfaEnroll({ onDone, showIntro = true }: { onDone: () => void | P
 
   return (
     <form onSubmit={submit} className="space-y-4">
-      {showIntro && <p className="text-sm text-slate-600">{t.auth.mfaIntro}</p>}
-      <p className="text-sm font-medium text-slate-800">{t.auth.mfaStep1}</p>
-      <div className="flex justify-center rounded-lg border border-slate-200 bg-white p-3">
+      {showIntro && <p className="text-sm text-neutral-600">{t.auth.mfaIntro}</p>}
+      <p className="text-sm font-medium text-neutral-800">{t.auth.mfaStep1}</p>
+      <div className="flex justify-center rounded-lg border border-neutral-200 bg-white p-3">
         <img src={enrollment.qr} alt="QR code" className="h-44 w-44" />
       </div>
-      <p className="text-xs text-slate-500">
-        {t.auth.mfaManual} <code className="break-all rounded bg-slate-100 px-1.5 py-0.5 font-mono text-slate-800">{enrollment.secret}</code>
+      <p className="text-xs text-neutral-500">
+        {t.auth.mfaManual} <code className="break-all rounded bg-neutral-100 px-1.5 py-0.5 font-mono text-neutral-800">{enrollment.secret}</code>
       </p>
-      <p className="text-sm font-medium text-slate-800">{t.auth.mfaStep2}</p>
+      <p className="text-sm font-medium text-neutral-800">{t.auth.mfaStep2}</p>
       {error && <Alert tone="error">{error}</Alert>}
       <Field label={t.auth.mfaCode} htmlFor="mfa-code">
         <Input id="mfa-code" inputMode="numeric" autoComplete="one-time-code" maxLength={6} required

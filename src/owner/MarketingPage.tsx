@@ -43,7 +43,7 @@ export function MarketingPage() {
                 { key: "source", label: t.crm.source, options: [...new Set(crmDemo.leads.map((l) => l.source))].map((s) => ({ value: s, label: s })) },
               ]}
               columns={[
-                { key: "name", label: t.common.name, primary: true, render: (r) => <><p className="font-medium">{r.name}</p><p className="text-xs text-slate-500">{r.phone}</p></>, value: (r) => `${r.name} ${r.phone}` },
+                { key: "name", label: t.common.name, primary: true, render: (r) => <><p className="font-medium">{r.name}</p><p className="text-xs text-neutral-500">{r.phone}</p></>, value: (r) => `${r.name} ${r.phone}` },
                 { key: "source", label: t.crm.source },
                 { key: "interest", label: t.crm.interest, render: (r) => r.interest.replace("_", " ") },
                 { key: "budget", label: t.crm.budget, kind: "money" },
@@ -58,12 +58,12 @@ export function MarketingPage() {
           {d.campaigns.map((c) => (
             <li key={c.id}>
               <Card className="p-4">
-                <div className="flex items-start justify-between gap-2"><div><p className="font-semibold text-slate-900">{c.name}</p><p className="text-sm text-slate-500">{c.channel}</p></div><StatusBadge value={c.status} /></div>
-                <div className="mt-3"><p className="mb-1 text-xs text-slate-500">{t.marketing.spent} {money(c.spent)} / {money(c.budget)}</p><ProgressBar value={(c.spent / c.budget) * 100} /></div>
+                <div className="flex items-start justify-between gap-2"><div><p className="font-semibold text-neutral-900">{c.name}</p><p className="text-sm text-neutral-500">{c.channel}</p></div><StatusBadge value={c.status} /></div>
+                <div className="mt-3"><p className="mb-1 text-xs text-neutral-500">{t.marketing.spent} {money(c.spent)} / {money(c.budget)}</p><ProgressBar value={(c.spent / c.budget) * 100} /></div>
                 <dl className="mt-3 grid grid-cols-3 gap-2 text-center">
-                  <div><dt className="text-[11px] uppercase text-slate-500">{t.marketing.leads}</dt><dd className="text-lg font-semibold">{c.leads}</dd></div>
-                  <div><dt className="text-[11px] uppercase text-slate-500">{t.marketing.signed}</dt><dd className="text-lg font-semibold">{c.signed}</dd></div>
-                  <div><dt className="text-[11px] uppercase text-slate-500">{t.marketing.costPerLead}</dt><dd className="text-lg font-semibold">{c.leads ? money(c.spent / c.leads) : "—"}</dd></div>
+                  <div><dt className="text-[11px] uppercase text-neutral-500">{t.marketing.leads}</dt><dd className="text-lg font-semibold">{c.leads}</dd></div>
+                  <div><dt className="text-[11px] uppercase text-neutral-500">{t.marketing.signed}</dt><dd className="text-lg font-semibold">{c.signed}</dd></div>
+                  <div><dt className="text-[11px] uppercase text-neutral-500">{t.marketing.costPerLead}</dt><dd className="text-lg font-semibold">{c.leads ? money(c.spent / c.leads) : "—"}</dd></div>
                 </dl>
               </Card>
             </li>
@@ -89,9 +89,9 @@ export function MarketingPage() {
                   {q.channel === "whatsapp" ? <MessageCircle className="h-4 w-4" /> : <Globe className="h-4 w-4" />}
                 </span>
                 <div className="min-w-0 flex-1">
-                  <div className="flex flex-wrap items-center justify-between gap-2"><p className="font-medium text-slate-900">{q.name}</p><StatusBadge value={q.status} /></div>
-                  <p className="mt-1 text-sm text-slate-700">{q.message}</p>
-                  <p className="mt-1 text-xs text-slate-500"><Badge>{q.channel}</Badge> · {t.marketing.received} {timeAgo(q.received, t)}</p>
+                  <div className="flex flex-wrap items-center justify-between gap-2"><p className="font-medium text-neutral-900">{q.name}</p><StatusBadge value={q.status} /></div>
+                  <p className="mt-1 text-sm text-neutral-700">{q.message}</p>
+                  <p className="mt-1 text-xs text-neutral-500"><Badge>{q.channel}</Badge> · {t.marketing.received} {timeAgo(q.received, t)}</p>
                 </div>
               </Card>
             </li>

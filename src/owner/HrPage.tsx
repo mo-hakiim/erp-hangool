@@ -5,7 +5,7 @@ import { useCompany } from "@/features/settings/CompanySettings";
 import { PageHeader } from "@/components/ui";
 import { DemoBadge, Section, StatCard, Tabs, statusLabel } from "@/components/blocks";
 import { DataTable } from "@/components/DataTable";
-import { BarChartCard, DonutChartCard } from "@/components/charts";
+import { BarChartCard, DonutChartCard, brandColor } from "@/components/charts";
 import { hrDemo as d } from "@/demo/ownerDemo";
 
 type Tab = "employees" | "attendance" | "labour" | "leave" | "payroll";
@@ -38,12 +38,12 @@ export function HrPage() {
         <DataTable rows={d.attendance} rowKey={(r) => r.id} exportName="attendance-today"
           filters={[{ key: "status", label: t.common.status, options: ["present", "absent", "on_leave"].map((s) => ({ value: s, label: statusLabel(t, s) })) }]}
           columns={[
-            { key: "name", label: t.hr.person, primary: true, render: (r) => <><p className="font-medium">{r.name}</p><p className="text-xs text-slate-500">{r.kind === "labourer" ? t.hr.tabLabour : t.hr.tabEmployees}</p></>, value: (r) => r.name },
+            { key: "name", label: t.hr.person, primary: true, render: (r) => <><p className="font-medium">{r.name}</p><p className="text-xs text-neutral-500">{r.kind === "labourer" ? t.hr.tabLabour : t.hr.tabEmployees}</p></>, value: (r) => r.name },
             { key: "project", label: t.common.project },
             { key: "checkIn", label: t.hr.checkIn, render: (r) => time(r.checkIn), value: (r) => r.checkIn },
             { key: "checkOut", label: t.hr.checkOut, render: (r) => time(r.checkOut), value: (r) => r.checkOut },
             { key: "gps", label: t.hr.gps, render: (r) => r.lat != null ? (
-              <a href={`https://www.openstreetmap.org/?mlat=${r.lat}&mlon=${r.lng}#map=18/${r.lat}/${r.lng}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-brand-700 hover:underline">
+              <a href={`https://www.openstreetmap.org/?mlat=${r.lat}&mlon=${r.lng}#map=18/${r.lat}/${r.lng}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-primary hover:underline">
                 <MapPin className="h-3.5 w-3.5" />{r.lat.toFixed(4)}, {r.lng!.toFixed(4)}
               </a>) : "—", value: (r) => (r.lat != null ? `${r.lat}, ${r.lng}` : "") },
             { key: "status", label: t.common.status, kind: "status" },
@@ -93,7 +93,7 @@ export function HrPage() {
         <div className="space-y-4">
           <Section title={t.hr.tabPayroll} demo>
             <BarChartCard money data={d.payroll.map((p) => ({ name: p.name.split(" ")[0]!, net: p.net, deductions: p.deductions }))} x="name"
-              series={[{ key: "net", label: t.hr.net, color: "#0f172a" }, { key: "deductions", label: t.hr.deductions, color: "#e11d48" }]} stacked />
+              series={[{ key: "net", label: t.hr.net, color: brandColor("primary") }, { key: "deductions", label: t.hr.deductions, color: brandColor("danger") }]} stacked />
           </Section>
           <DataTable rows={d.payroll} rowKey={(r) => r.id} exportName="payroll"
             columns={[
