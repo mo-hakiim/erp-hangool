@@ -1,8 +1,26 @@
 # erp-hangool
 
-Planning files for the Hangool Construction ERP.
+Hangool Construction ERP — React + TypeScript + Supabase.
 
-## Files
+## Phase 1 progress
+
+- [x] **Stage 1 — database + security**: `supabase/migrations/` (58 tables, RLS on every table,
+  approvals engine, double-entry ledger, audit log, private storage buckets), `supabase/schema.sql`
+  (all migrations in one file, safe to re-run), `supabase/seed.sql` (demo data), `docs/erd.md` (ERD),
+  `tests/db/` (36 security / approval / ledger tests).
+- [ ] Stage 2 — foundation (login, 2FA, app shell, role guard)
+- [ ] Stage 3 — owner / CEO portal
+
+Setup and the security model: [docs/SETUP.md](docs/SETUP.md).
+
+```
+npm install
+npm run db:apply   # build + run supabase/schema.sql   (needs SUPABASE_DB_URL in .env.local)
+npm run db:seed    # demo data — test project only
+npm run db:test    # 36 tests, each rolled back
+```
+
+## Earlier planning files
 
 - `index.html` and `hangool-erd.html` (the same file; `index.html` is what the live page opens): entity relationship diagram of the database. It shows all 39 tables, colour-coded by section (Access, Sales, Projects, Design, BOQ, Approvals, Procurement, Inventory, Site, Finance, HR, Client portal, Marketing), with primary keys, foreign keys, relationship lines and a notes panel listing the design assumptions.
 

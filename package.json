@@ -1,0 +1,15 @@
+{
+  "name": "erp-hangool",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "db:build": "node scripts/db.mjs build",
+    "db:apply": "node scripts/db.mjs apply",
+    "db:seed": "node scripts/db.mjs seed",
+    "db:test": "node scripts/db.mjs test"
+  },
+  "devDependencies": {
+    "pg": "8.13.1"
+  }
+}
