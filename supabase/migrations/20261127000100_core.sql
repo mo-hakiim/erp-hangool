@@ -359,7 +359,8 @@ insert into public.settings (key, value) values
   ('company', '{"name":"Hangool Construction","phone":"","email":"","address":"Hargeisa, Somaliland","tax_id":"","logo_url":null}'),
   ('payment_two_approval_threshold', '5000'),
   ('currency', '{"code":"USD","symbol":"$"}'),
-  ('default_stage_names', '["foundation","columns","walls","roof","finishing"]')
+  ('default_stage_names', '["foundation","columns","walls","roof","finishing"]'),
+  ('require_staff_2fa', 'false')
 on conflict (key) do nothing;
 
 create or replace function public.setting_num(p_key text, p_default numeric default 0) returns numeric
@@ -405,6 +406,15 @@ returns void language sql security definer set search_path = public as $$
   where r.code = p_role and ur.revoked_at is null
     and (p_except is null or ur.user_id <> p_except);
 $$;
+
+-- Live updates for the notifications bell (Realtime respects RLS: users only get their own rows).
+do $$ begin
+  if exists (select 1 from pg_publication where pubname = 'supabase_realtime')
+     and not exists (select 1 from pg_publication_tables
+                     where pubname = 'supabase_realtime' and schemaname = 'public' and tablename = 'notifications') then
+    alter publication supabase_realtime add table public.notifications;
+  end if;
+end $$;
 
 create or replace function public.mark_notifications_read(p_ids uuid[] default null)
 returns int language plpgsql security definer set search_path = public as $$

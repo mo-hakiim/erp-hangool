@@ -29,6 +29,22 @@ You need a Supabase project (`hangool-erp`). Everything below uses only the SQL 
   refuses their data until they sign in with the code (session `aal2`).
 - **URL configuration**: set the Site URL to the app address and add `/reset-password` as a redirect URL.
 
+- **Require 2FA for all staff** (optional): set `require_staff_2fa` to `true` in the `settings`
+  table (the Settings screen in stage 3 has a switch). Staff without 2FA are then sent to the setup
+  screen right after signing in. Clients are never forced.
+
+## 2. App (React + Vite)
+
+1. `.env.local` (git-ignored) needs `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`
+   (dashboard → Project Settings → API; the publishable / anon key is meant for browsers).
+2. `npm install` then `npm run dev` → http://localhost:5173
+3. Supabase → Authentication → URL configuration: add `http://localhost:5173/reset-password`
+   and, later, `https://<your-vercel-domain>/reset-password` to the redirect URLs so password-reset
+   emails land on the reset screen.
+4. **Vercel**: import the repo, framework "Vite", build `npm run build`, output `dist`, and add the two
+   `VITE_…` variables in Project → Settings → Environment Variables. `vercel.json` sends every route
+   to the app.
+
 ### Demo logins (seed only)
 All demo users share the test password written at the top of `supabase/seed.sql`.
 Emails are `owner@demo.hangool.test`, `finance@demo.hangool.test`, `client.a@demo.hangool.test`, etc.
