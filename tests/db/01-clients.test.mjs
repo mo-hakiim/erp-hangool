@@ -5,9 +5,12 @@ import { inTx, U, P, C } from "./helpers.mjs";
 
 test("client A sees only their own projects, invoices, payments and client row", () =>
   inTx(async (db) => {
+    await db.admin();
+    const own = (await db.q("select id from projects where client_id = $1", [C.A])).map((r) => r.id).sort();
+    assert.ok(own.includes(P.villa) && own.includes(P.wall));
     await db.as("clientA");
     const projects = (await db.q("select id from projects order by code")).map((r) => r.id);
-    assert.deepEqual(projects.sort(), [P.villa, P.wall].sort());
+    assert.deepEqual(projects.sort(), own);
     assert.equal(await db.count("projects", "client_id <> $1", [C.A]), 0);
     assert.equal(await db.count("clients"), 1);
     assert.equal(await db.count("invoices", "client_id <> $1", [C.A]), 0);
@@ -15,7 +18,8 @@ test("client A sees only their own projects, invoices, payments and client row",
     assert.equal(await db.count("invoices", "status = 'draft'"), 0);
     assert.equal(await db.count("payments", "client_id <> $1", [C.A]), 0);
     assert.equal(await db.count("contracts", "client_id <> $1", [C.A]), 0);
-    assert.equal(await db.count("stages", "project_id not in ($1, $2)", [P.villa, P.wall]), 0);
+    assert.equal(await db.count("stages", "project_id <> all($1::uuid[])", [own]), 0);
+    assert.ok((await db.count("stages")) > 0);
   }));
 
 test("client B cannot see any of client A's data (and the other way round)", () =>

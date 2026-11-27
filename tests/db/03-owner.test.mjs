@@ -81,3 +81,26 @@ test("audit log records changes with the actor, and nobody can edit it", () =>
     await db.as("hr");
     assert.equal(await db.count("audit_log"), 0);
   }));
+
+test("staff admin functions are owner-only and respect the last-owner rule", () =>
+  inTx(async (db) => {
+    for (const who of ["gm", "hr", "finance", "clientA"]) {
+      await db.as(who);
+      const list = await db.attempt("select * from public.admin_staff_list()");
+      assert.match(String(list.error?.message), /Only the owner/, `${who} must not list staff`);
+      const set = await db.attempt("select public.admin_set_role($1, 'finance', true)", [U.engineer]);
+      assert.match(String(set.error?.message), /Only the owner/, `${who} must not change roles`);
+    }
+    await db.as("owner");
+    const rows = await db.q("select * from public.admin_staff_list()");
+    assert.ok(rows.length >= 19);
+    assert.ok(rows.every((r) => Array.isArray(r.roles)));
+    await db.q("select public.admin_set_role($1, 'qs', true)", [U.engineer2]);
+    const after = await db.one("select roles from public.admin_staff_list() where id = $1", [U.engineer2]);
+    assert.deepEqual([...after.roles].sort(), ["qs", "site_engineer"]);
+    const audit = await db.one("select actor_id, action from audit_log where table_name = 'user_roles' order by id desc limit 1");
+    assert.equal(audit.actor_id, U.owner);
+    assert.equal(audit.action, "role_change");
+    const last = await db.attempt("select public.admin_set_role($1, 'owner', false)", [U.owner]);
+    assert.match(String(last.error?.message), /last owner/);
+  }));

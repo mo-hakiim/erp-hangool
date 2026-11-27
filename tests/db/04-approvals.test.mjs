@@ -152,10 +152,17 @@ test("project approvals: only that project's manager can decide the PM step", ()
 test("stage completion, BOQ, change request and leave outcomes are applied", () =>
   inTx(async (db) => {
     await db.admin();
-    const groups = await db.q("select distinct request_group, entity_table from approvals where status = 'pending'");
+    const groups = await db.q(`select distinct a.request_group, a.entity_table from approvals a
+      where a.status = 'pending' and a.entity_table <> 'stages'`);
     const g = Object.fromEntries(groups.map((x) => [x.entity_table, x.request_group]));
 
-    // Stage completion requested by PM2 (PM step skipped) -> owner
+    // Stage completion requested by PM2 (PM step skipped) -> owner. Made fresh here so the test
+    // does not depend on what was decided in the demo data.
+    await db.q("select set_config('app.approval_engine', 'off', true)");
+    await db.q("update stages set status = 'done', progress_pct = 100 where project_id = $1 and seq = 1", [P.block]);
+    await db.q("update approvals set status = 'cancelled' where entity_table = 'stages' and status = 'pending' and entity_id = (select id from stages where project_id = $1 and seq = 1)", [P.block]);
+    const stageId = (await db.one("select id from stages where project_id = $1 and seq = 1", [P.block])).id;
+    g.stages = await request(db, "pm2", "stage_completion", "stages", stageId, "Foundation complete (test)");
     const st = await steps(db, g.stages);
     assert.deepEqual(st.map((x) => [x.role, x.status]), [["project_manager", "skipped"], ["owner", "pending"]]);
     assert.equal((await decide(db, "owner", st[1].id, true)).error, null);

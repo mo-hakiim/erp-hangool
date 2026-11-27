@@ -45,6 +45,48 @@ You need a Supabase project (`hangool-erp`). Everything below uses only the SQL 
    `VITE_…` variables in Project → Settings → Environment Variables. `vercel.json` sends every route
    to the app.
 
+## 3. Edge Function `admin-staff` (Staff & roles: invite, switch off / on)
+
+The function uses the `service_role` key, which Supabase gives to every Edge Function automatically
+(`SUPABASE_SERVICE_ROLE_KEY`). You do **not** add it anywhere — not in `.env.local`, not in the repo,
+not in Vercel. The function first checks that the caller is the owner, and does every database write
+as the owner (so RLS and the audit log still apply). Only the Auth admin calls (invite, ban) use the key.
+
+Deploy it once (either way works):
+
+- **Dashboard**: Edge Functions → *Deploy a new function* → *Via editor* → name it `admin-staff` →
+  paste `supabase/functions/admin-staff/index.ts` → *Deploy*. Keep "Verify JWT" **on**.
+- **CLI** (from the repo folder):
+  ```
+  npx supabase login
+  npx supabase functions deploy admin-staff --project-ref <your-project-ref>
+  ```
+
+Then, in Authentication → URL configuration, make sure `/reset-password` on your app address is an
+allowed redirect URL — invite emails send people there to choose their password.
+For real use, set up your own SMTP under Authentication → Emails (Supabase's built-in sender is
+rate-limited and meant for testing).
+
+Until the function is deployed, the Staff & roles screen still lists people and changes roles
+(those go through the database directly); inviting and switching accounts off show a clear message.
+
+## 4. What is live and what is sample data (Owner portal)
+
+| Screen | Data |
+|---|---|
+| Projects (list, create, detail, stages add / edit / delete / request completion, BOQ, reports, documents, financials) | **Live** |
+| Approvals Center (pending, history, approve, reject with reason) | **Live** |
+| Notifications (bell, page, mark as read, live updates) | **Live** |
+| Staff & roles (list, roles, invite, switch off / on) | **Live** (invite / switch off need the Edge Function) |
+| Audit log (filters, before / after) | **Live** |
+| Settings (company, two-approval limit, currency, require 2FA, default stages) | **Live** |
+| Overview | Sample data, except *Pending approvals* and *Latest notifications* (live) |
+| Finance, Clients & CRM, Procurement, Inventory, HR & Attendance, Real estate, Marketing, Reports, Documents | Sample data |
+
+Every sample card or page shows a purple **Demo data** badge. All sample values live in one file,
+`src/demo/ownerDemo.ts`; to make a screen live, replace its import from that file with a Supabase
+query that returns the same shape (the tables already exist — see `docs/erd.md`).
+
 ### Demo logins (seed only)
 All demo users share the test password written at the top of `supabase/seed.sql`.
 Emails are `owner@demo.hangool.test`, `finance@demo.hangool.test`, `client.a@demo.hangool.test`, etc.

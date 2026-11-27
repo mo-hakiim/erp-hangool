@@ -6,6 +6,7 @@ import { BrandMark } from "@/auth/AuthLayout";
 import { useI18n } from "@/i18n";
 import { cn, initials, timeAgo } from "@/lib/format";
 import { NotificationsProvider, useNotifications } from "@/features/notifications/NotificationsProvider";
+import { CompanySettingsProvider } from "@/features/settings/CompanySettings";
 import { visibleNav, type NavItem } from "./nav";
 
 export function AppShell() {
@@ -14,7 +15,7 @@ export function AppShell() {
   useEffect(() => setOpen(false), [location.pathname]);
 
   return (
-    <NotificationsProvider>
+    <NotificationsProvider><CompanySettingsProvider>
       <div className="min-h-dvh bg-slate-50 lg:flex">
         {/* desktop sidebar */}
         <aside className="hidden w-64 shrink-0 border-r border-slate-200 bg-ink-900 lg:block">
@@ -37,7 +38,7 @@ export function AppShell() {
           </main>
         </div>
       </div>
-    </NotificationsProvider>
+    </CompanySettingsProvider></NotificationsProvider>
   );
 }
 

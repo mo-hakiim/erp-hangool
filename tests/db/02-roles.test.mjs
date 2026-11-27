@@ -31,25 +31,34 @@ const expectations = {
   store:       { suppliers: "all", invoices: 0, employees: 1, journal_entries: 0 },
   marketing:   { leads: "all", properties: "all", projects: 0, invoices: 0, employees: 1 },
   realestate:  { properties: "all", leads: "all", projects: 0, invoices: 0, journal_entries: 0 },
-  engineer:    { projects: 2, invoices: 0, employees: 1, journal_entries: 0, leads: 0 },
-  engineer2:   { projects: 1, invoices: 0, journal_entries: 0 },
-  supervisor:  { projects: 1, invoices: 0, journal_entries: 0 },
-  qs:          { projects: 1, invoices: 0 },
-  architect:   { projects: 1, invoices: 0 },
-  pm:          { projects: 3, journal_entries: 0, leads: 0 },
-  pm2:         { projects: 1, journal_entries: 0 },
+  engineer:    { projects: "assigned", invoices: 0, employees: 1, journal_entries: 0, leads: 0 },
+  engineer2:   { projects: "assigned", invoices: 0, journal_entries: 0 },
+  supervisor:  { projects: "assigned", invoices: 0, journal_entries: 0 },
+  qs:          { projects: "assigned", invoices: 0 },
+  architect:   { projects: "assigned", invoices: 0 },
+  pm:          { projects: "assigned", journal_entries: 0, leads: 0 },
+  pm2:         { projects: "assigned", journal_entries: 0 },
   employee:    { projects: 0, invoices: 0, employees: 1, journal_entries: 0, leads: 0, suppliers: 0 },
 };
 
 test("each role's visibility matches the permission matrix", () =>
   inTx(async (db) => {
     const all = await totals(db);
+    // Projects a person works on (manager or member), counted as admin: project roles must see exactly these.
+    const assigned = {};
+    for (const who of Object.keys(expectations)) {
+      assigned[who] = (await db.one(
+        `select count(*)::int n from projects p where p.manager_id = $1
+           or exists (select 1 from project_members m where m.project_id = p.id and m.user_id = $1)`, [U[who]])).n;
+    }
     for (const [who, exp] of Object.entries(expectations)) {
       await db.as(who);
       for (const [table, want] of Object.entries(exp)) {
         const n = await db.count(table);
-        assert.equal(n, want === "all" ? all[table] : want, `${who} → ${table}`);
+        const expected = want === "all" ? all[table] : want === "assigned" ? assigned[who] : want;
+        assert.equal(n, expected, `${who} → ${table}`);
       }
+      await db.admin();
     }
   }));
 

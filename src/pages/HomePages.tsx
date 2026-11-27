@@ -4,7 +4,7 @@ import { useAuth } from "@/auth/AuthProvider";
 import { fmt, useI18n } from "@/i18n";
 import { Badge, Card, PageHeader } from "@/components/ui";
 import { useNotifications } from "@/features/notifications/NotificationsProvider";
-import type { Dictionary } from "@/i18n/en";
+
 
 function Welcome({ intro }: { intro: string }) {
   const { t } = useI18n();
@@ -41,16 +41,3 @@ export function ClientHomePage() {
   return <Welcome intro={t.home.clientIntro} />;
 }
 
-/** Temporary owner screen until stage 3 replaces it. */
-export function OwnerPlaceholder({ titleKey }: { titleKey: keyof Dictionary["nav"] }) {
-  const { t } = useI18n();
-  return (
-    <div>
-      <PageHeader title={t.nav[titleKey]} />
-      <Card className="flex items-start gap-4 p-5">
-        <Construction className="h-8 w-8 shrink-0 text-brand-500" aria-hidden />
-        <p className="text-sm text-slate-600">{t.app.comingSoon}</p>
-      </Card>
-    </div>
-  );
-}

@@ -11,7 +11,10 @@ Hangool Construction ERP — React + TypeScript + Supabase.
 - [x] **Stage 2 — foundation**: email + password sign-in, forgot / reset / change password,
   TOTP 2FA (setup, sign-in challenge, optional company-wide requirement), app shell with a role-based
   sidebar, notifications bell (live), user menu, phone layout, role guard on every page.
-- [ ] Stage 3 — owner / CEO portal
+- [x] **Stage 3 — owner / CEO portal**: all 16 screens. Live: Projects (+ stages), Approvals Center,
+  Notifications, Staff & roles (Edge Function `admin-staff`), Audit log, Settings. The rest use sample
+  data from `src/demo/ownerDemo.ts` with a "Demo data" badge. Tables are searchable, filterable,
+  exportable (Excel / PDF) and turn into cards on phones.
 
 Setup and the security model: [docs/SETUP.md](docs/SETUP.md).
 
@@ -34,8 +37,11 @@ src/
   auth/          AuthProvider (session, roles, permissions, 2FA state), sign-in / reset / 2FA screens
   app/           AppShell (sidebar, top bar, bell, user menu), nav.ts (menu + access rules), guards
   features/      notifications (live provider)
-  pages/         account, notifications, home pages, owner screens
-supabase/        migrations, schema.sql, seed.sql
+  pages/         account, notifications, home pages
+  owner/         the 16 Owner / CEO screens
+  demo/          ownerDemo.ts — ALL sample data in one file
+  components/    ui, blocks, DataTable (search / filter / export / phone cards), charts
+supabase/        migrations, schema.sql, seed.sql, functions/admin-staff
 tests/db/        database security tests
 docs/            erd.md, SETUP.md, earlier ERD HTML diagrams
 ```
